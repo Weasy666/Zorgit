@@ -1,0 +1,41 @@
+[global.limits]
+forms = "64 kB"
+json = "1 MiB"
+
+[debug]
+domain = "http://localhost:2020"
+address = "127.0.0.1"
+port = 2020
+workers = 10
+keep_alive = 0
+log_level = "normal"
+secret_key = "8nx0mg8QMRAfDlhfvUwQPpn5YGlsIMrO2kwyvqQ6U+U="
+
+session_key = "sid"
+session_duration = 7
+data_path = ""
+
+[debug.attachments]
+path = "attachments"
+avatars = "avatars"
+
+[debug.projects]
+path = "zorgit-projects"
+pull_requests = { work_in_progress_prefixes = ["WIP:","[WIP]:"] }
+
+[debug.mailer]
+service = "SMTP"
+with_helo = false
+#helo_hostname = "Option<String>"
+from = "zorgit@example.com"
+smtp_server = "smtp.example.com:587"
+smtp_user = "zorgit@example.com"
+smtp_password = "mega_secret_password"
+subject_prefix = "[Zorgit]"
+
+[release]
+address = "0.0.0.0"
+port = 2020
+workers = 12
+keep_alive = 0
+log_level = "critical"

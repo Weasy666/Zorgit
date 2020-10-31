@@ -9,13 +9,11 @@ build = "build.rs"
 [dependencies]
 ### Server
 #### Core
-rocket = { git = "https://github.com/SergioBenitez/Rocket/", rev = "0c150c2", features = ["secrets"] }
-rocket_contrib = { git = "https://github.com/SergioBenitez/Rocket/", rev = "0c150c2", features = [ "helmet", "json", "serve", "diesel_sqlite_pool" ] }
+rocket = { git = "https://github.com/SergioBenitez/Rocket/", rev = "0c150c2", default-features = false, features = ["secrets"] }
+rocket_contrib = { git = "https://github.com/SergioBenitez/Rocket/", rev = "0c150c2", default-features = false, features = [ "helmet", "json", "serve", "tera_templates", "uuid" ] }
 
 #### Frontend
-url = "2.1.1"
-askama = "0.10.3"
-askama_rocket = "0.10.0"
+url = { version = "2.1.1", default-features = false, features = ["serde"] }
 pulldown-cmark = { version = "0.8.0", default-features = false, features = ["simd"] }
 syntect = { version = "4.4.0", default-features = false, features = ["default-fancy"] }
 #tokei = "10.0.1" #Code statistics
@@ -32,9 +30,9 @@ lettre_email = "0.9.4"
 native-tls = "0.2.4"
 
 ### Database
-diesel = { version = "1.4.5", features = ["sqlite", "r2d2", "chrono"] }
-diesel_migrations = "1.4.0"
-libsqlite3-sys = { version = "0.17.3", features = ["bundled"] }
+#diesel = { version = "1.4.5", features = ["sqlite", "r2d2", "chrono"] }
+#diesel_migrations = "1.4.0"
+#libsqlite3-sys = { version = "0.17.3", features = ["bundled"] }
 
 ### Authentication & Encryption
 rocket_airlock = { git = "https://github.com/Weasy666/rocket_airlock" }
@@ -43,39 +41,37 @@ rust-argon2 = "0.8.2" # features = ["crossbeam-utils"]
 rand = "0.7.3"
 rand_chacha = "0.2.2"
 #pwned = "0.1.2"
-time = "0.1.42"
+time = "0.2.22"
 
 ### VCS - Version Control System
 #### Git
-git2 = "0.13.11"
+git2 = "0.13.12"
 #find_git = "1.2.0"
 
 ### Misc
+dotenv = "0.15.0"
 uuid = { version = "0.8.1", features = ["serde", "v4", "v5"] }
 sha1 = "0.6.0"
 chrono = "0.4.19"
-config = { version = "0.10.1", default-features = false, features = ["toml"] }
-once_cell = "1.4.1"
 directories = "3.0.1"
 walkdir = "2.3.1"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0.58"
+serde = { version = "1.0.117", features = ["derive"] }
+serde_json = "1.0.59"
 bytesize = "1.0.1"
 blockies = "0.3.0"
-#pretty_env_logger = "0.4.0"
 log = "0.4.11"
-anyhow = "1.0.32"
-thiserror = "1.0.20"
-remove_dir_all = "0.6.0"
-#shrinkwraprs = "0.2.1" # auto derives some Traits to unpack inner values of wrapper types
+anyhow = "1.0.33"
+thiserror = "1.0.21"
+remove_dir_all = "0.6.1"
 #identicon-rs = "1.3.0"
 #minimap = "0.1.0" # generates a minimap of a code file
 #geopattern = "0.3.0" # generates geometric backgrounds/svg-images from a string
 #gravatar = "0.2.0"
-#clokwerk = "0.1.0"
+#clokwerk = "0.3.3"
 
 ### GraphQL API
-#juniper = "0.11.1"
+#async-graphql = { git = "https://github.com/async-graphql/async-graphql" }
+#async-graphql-rocket = { git = "https://github.com/async-graphql/async-graphql" }
 
 ### Authentication
 #oxide-auth = "0.4"     #OAuth2

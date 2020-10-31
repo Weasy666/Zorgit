@@ -9,8 +9,9 @@ fn main() -> Result<(), std::io::Error> {
 
 fn convert_icon_svg_to_css() -> Result<(), std::io::Error> {
     let icons_path = Path::new("assets/ui_icons");
-    let css_path = "static/css/zorgit-icons.css";
-    let mut f = File::create(&css_path)?;
+    let css_path = Path::new("static/css/");
+    fs::create_dir_all(css_path)?;
+    let mut f = File::create(css_path.join("zorgit-icons.css"))?;
 
     let dirs = walk_dirs(icons_path)?;
     for (dir, entries) in dirs {
