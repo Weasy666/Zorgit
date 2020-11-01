@@ -1,0 +1,23 @@
+[package]
+name = "zorgit_common"
+version = "0.1.0"
+authors = ["Daniel Wiesenberg <weasy@hotmail.de>"]
+edition = "2018"
+
+[dependencies]
+rocket = { git = "https://github.com/SergioBenitez/Rocket/", rev = "0c150c2", default-features = false }
+url = { version = "2.1.1", default-features = false, features = ["serde"] }
+syntect = { version = "4.4.0", default-features = false, features = ["default-fancy"] }
+time = { version = "0.2.22", default-features = false, features = ["std", "serde"] }
+uuid = { version = "0.8.1", default-features = false, features = ["serde", "v4", "v5"] }
+sha1 = "0.6.0"
+serde = { version = "1.0.117", default-features = false, features = ["derive"] }
+serde_json = { version = "1.0.59", default-features = false, features = ["std"] }
+anyhow = "1.0.34"
+fast_chemail = "0.9.6"
+rand = { version = "0.7.3", default-features = false, features = ["std"] }
+rand_chacha = "0.2.2"
+rust-argon2 = "0.8.2" # features = ["crossbeam-utils"]
+data-encoding = "2.3.1"
+unic-langid = "0.9.0"
+blockies = "0.3.0"

@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use rocket::launch;
 use rocket_contrib::serve::StaticFiles;
 use crate::config::ZorgitConfig;
+use zorgit_common;
 
 mod config;
 mod url;
