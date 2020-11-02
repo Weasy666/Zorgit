@@ -1,0 +1,16 @@
+[package]
+name = "zorgit_vcs"
+version = "0.1.0"
+authors = ["Daniel Wiesenberg <weasy@hotmail.de>"]
+edition = "2018"
+
+[dependencies]
+zorgit_common = { path = "../common" }
+rocket = { git = "https://github.com/SergioBenitez/Rocket/", rev = "0c150c2", default-features = false }
+syntect = { version = "4.4.0", default-features = false, features = ["default-fancy"] }
+async-trait = "0.1.41"
+futures = "0.3.7"
+tokio = { version = "0.2.9", default-features = false, features = ["process"] }
+time = "0.2.22"
+anyhow = "1.0.34"
+

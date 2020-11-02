@@ -4,6 +4,7 @@ use rocket::launch;
 use rocket_contrib::serve::StaticFiles;
 use crate::config::ZorgitConfig;
 use zorgit_common;
+use zorgit_vcs;
 
 mod config;
 mod url;
