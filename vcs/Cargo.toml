@@ -12,5 +12,7 @@ async-trait = "0.1.41"
 futures = "0.3.7"
 tokio = { version = "0.2.9", default-features = false, features = ["process"] }
 time = "0.2.22"
+git2 = "0.13.12"
+#find_git = "1.2.0"
 anyhow = "1.0.34"
 
