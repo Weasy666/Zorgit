@@ -53,6 +53,6 @@ pub trait VersionControl: Sized {
 }
 
 pub trait Server {
-    fn extension(&self) -> String;
-    fn routes() -> Vec<rocket::Route>;
+    const EXT: &'static str;
+    const ROUTES: &'static [rocket::Route];
 }
