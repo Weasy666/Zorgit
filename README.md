@@ -17,15 +17,15 @@ The current goal is to make this thing usable for users, with public and private
 ### Current status
 Currently the project is in a very early state and should not, I repeat **NOT**, be used in production. If you do, you do it at your own risk.
 
-- [x] Basic user accounts and authentication
-- [x] Project/Repository ownership for single users (Organizations are not implemented yet)
-- [x] Project/Repository visibility and access restriction with private repositories
-- [x] Project can be created and optionally initialized with a new bare repository in the configured Zorgit directory
-- [x] Issues can be created with assignees and labels and comments can be added. Something like user mentions or parsed and linked commits are not implemented yet.
-- [x] Repository entries can be navigated and single files can be opened and displayed
-- [x] Last commit is shown for each entry and the newest one above in the table header
-- [x] Commits and branches can be viewed
-- [x] Dashboard with all projects of a user
+- [ ] Basic user accounts and authentication
+- [ ] Project/Repository ownership for single users (Organizations are not implemented yet)
+- [ ] Project/Repository visibility and access restriction with private repositories
+- [ ] Project can be created and optionally initialized with a new bare repository in the configured Zorgit directory
+- [ ] Issues can be created with assignees and labels and comments can be added. Something like user mentions or parsed and linked commits are not implemented yet.
+- [ ] Repository entries can be navigated and single files can be opened and displayed
+- [ ] Last commit is shown for each entry and the newest one above in the table header
+- [ ] Commits and branches can be viewed
+- [ ] Dashboard with all projects of a user
 
 So as you can see, the most basic stuff is working, but a lot is still missing. It is not possible to delete or archive a project and currently all settings pages (user and project) don't exist. Also general access to projects is limited, but there is still no difference between a collaborator or the project owner and even worse, public projects allow every logged in user to edit labels, commits and so on.
 I would also like to restructure the source code, but have still not decided on what the best solution is. CSS also needs some restructuring and extracting colors to CSS values to allow theming. And the authentication system also needs a complete overhaul and the database operations too.
@@ -37,4 +37,18 @@ I tried to stick to this [Guide](https://stackoverflow.com/questions/549/the-def
 No CORS or such is currently implemented because I have no prior knowledge of that and still have to read it up.
 
 > [![](assets/password_strength.png)](https://xkcd.com/936/)
-> Don't think to much about it, this image is just here to test the image functionality.
+> Don't think to much about it, this image is just here to test the image functionality on my dogfooted test Zorgit.
+
+
+### Old Zorgit
+The old, pre-rewrite Zorgit code can be found on the branch: [old](tree/old). On the old code base the following was working:
+
+- [x] Basic user accounts and authentication
+- [x] Project/Repository ownership for single users (Organizations are not implemented yet)
+- [x] Project/Repository visibility and access restriction with private repositories
+- [x] Project can be created and optionally initialized with a new bare repository in the configured Zorgit directory
+- [x] Issues can be created with assignees and labels and comments can be added. Something like user mentions or parsed and linked commits are not implemented yet.
+- [x] Repository entries can be navigated and single files can be opened and displayed
+- [x] Last commit is shown for each entry and the newest one above in the table header
+- [x] Commits and branches can be viewed
+- [x] Dashboard with all projects of a user
