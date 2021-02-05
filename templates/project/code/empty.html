@@ -1,0 +1,54 @@
+<div class="file-box boxed">
+  <h4 class="file-header">
+    Quick setup guide
+  </h4>
+  <div class="file-content">
+    <div class="section">
+      <h4>If it's not your first time, just clone this project</h4>
+      <div class="field has-addons">
+        <p class="control">
+          <a id="project-clone-https" class="button is-primary is-outlined is-active" data-url="{{ project.clone_url_http() }}">
+            HTTPS
+          </a>
+        </p>
+        <p class="control">
+          <a id="project-clone-ssh" class="button" data-url="git@localhost:{{ project.url_absolute() }}.git">
+            SSH
+          </a>
+        </p>
+        <p class="control is-expanded">
+          <input id="project-clone-url" class="input" type="text" value="{{ project.url_absolute() }}.git" readonly>
+        </p>
+        <p class="control">
+          <a id="project-clone-clipboard" class="button">
+            <span class="icon">
+              <i class="zg-icon zg-copy" aria-hidden="true"></i>
+            </span>
+          </a>
+        </p>
+      </div>
+    </div>
+    <hr/>
+    <div class="section">
+      <h4>…or create a new project on the command line</h4>
+      <div class="code">
+      <pre><code>touch README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin <span class="clone-url">{{ project.url_absolute() }}.git</span>
+git push -u origin master
+</code></pre>
+      </div>
+    </div>
+    <hr/>
+    <div class="section">
+      <h4>…or push an existing project from the command line</h4>
+      <div class="code">
+      <pre><code>git remote add origin <span class="clone-url">{{ project.url_absolute() }}.git</span>
+git push -u origin master
+</code></pre>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1418 @@
+.project-header {
+    padding-top: 1em;
+}
+
+.padding-top-1 {
+    padding-top: 1em;
+}
+
+.padding-bottom-0-5 {
+    padding-bottom: 0.5em;
+}
+
+.padding-bottom-0-75 {
+    padding-bottom: 0.75em;
+}
+
+.padding-bottom-1 {
+    padding-bottom: 1.0em;
+}
+
+.margin-bottom-0-75 {
+    margin-bottom: 0.75em;
+}
+
+.is-horz-flipped {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
+.is-vert-flipped {
+    -moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+}
+
+.navbar-divider {
+    height: 1px;
+}
+
+.panel-header {
+    margin-bottom: 0em !important;
+    font-size: 1.1em;
+}
+
+.content,
+.menu {
+    padding-top: 15px;
+    padding-bottom: 80px;
+}
+
+.tabs-container,
+.issues-box article.issue:not(:last-child),
+.labels-box li.label:not(:last-child) {
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.tabs-container .tabs {
+    margin-bottom: -1px;
+}
+
+.zg-icon {
+    background-color: currentColor;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    width: inherit;
+    height: inherit;
+    display: inline-block;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    pointer-events: none;
+}
+
+.logo {
+    width: inherit;
+    height: inherit;
+    pointer-events: none;
+}
+
+.icon.is-medium-small {
+    height: 1.25rem;
+    width: 1.25rem;
+}
+
+.field.is-medium-small {
+
+}
+
+.field.is-medium-small .button,
+.field.is-medium-small .input,
+.button.is-medium-small {
+    font-size: 0.85rem;
+}
+
+.button.dropdown-trigger.is-medium-small + .dropdown-menu {
+    top: 80%;
+}
+
+section input.button {
+    display: inherit;
+    margin-left: auto;
+}
+
+section:not(:last-child) {
+    margin-bottom: 1.5rem;
+}
+
+.buttons .button.is-one-quarter,
+.field .control.is-one-quarter,
+.is-one-quarter {
+    width: 25%;
+}
+
+.field .control.is-one-quarter > .button {
+    width: 100%;
+}
+
+.button span,
+.navbar-link span.image,
+.navbar-link span.icon {
+    pointer-events: none;
+}
+
+button.dropdown-trigger.button .icon.is-tiny .zg-icon,
+.select + .icon.is-tiny .zg-icon,
+.field.is-medium-small .button .icon .zg-icon {
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    height: 1.25em;
+    width: 1.25em;
+}
+
+.button .icon .zg-icon,
+input + .icon .zg-icon,
+.select + .icon .zg-icon {
+    -webkit-mask-size: auto;
+    mask-size: auto;
+}
+
+.panel-heading,
+.panel-tabs,
+.panel-block {
+    border: 1px solid transparent;
+    border-top: 1px solid #dbdbdb;
+}
+
+.dropdown-content .panel-block:first-child {
+    border-radius: 4 4 0 0px;
+}
+
+.dropdown-content .panel-block:last-child {
+    border-radius: 0 0 4 4px;
+}
+
+.dropdown-content .panel-block:only-child {
+    border-radius: 4px;
+}
+
+.dropdown-content p.panel-tabs {
+    margin-bottom: -1px;
+}
+
+.dropdown-content .panel-tabs a {
+    border-bottom: 1px solid #dbdbdb;
+    margin-bottom: -1px;
+    padding: 0.5em;
+    color: #4a4a4a;
+}
+
+.dropdown-content .panel-tabs a:hover {
+    border-bottom-color: #363636;
+    color: #363636;
+}
+
+.dropdown-content .panel-tabs a.is-active {
+    border-bottom-color: #3273dc;
+    color: #3273dc;
+}
+
+.menu.side,
+.dashboard-sidebar,
+.issue-metas-box {
+    width: 20%;
+    min-width: 250px;
+}
+
+.menu .panel-heading {
+    border-top-color: transparent;
+}
+
+.menu.content,
+.menu.content form > div + div {
+    padding-left: 50px;
+    width: 80%;
+}
+
+.menu.content section form,
+.menu.content .email-list,
+.menu.content section.message {
+    max-width: calc(100vw * 0.4);
+}
+
+.panel-block .panel-icon {
+    margin-right: 0.75em;
+    height: 1.2rem;
+    width: 1.2rem;
+}
+
+.panel-block .logo {
+    margin-right: 0.75em;
+    height: 2.75rem;
+}
+
+.dropdown .logo > img {
+    height: 100%;
+}
+
+.button .logo {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+}
+
+.project-entry .icon {
+    height: 1.2rem;
+    width: 1.2rem;
+    vertical-align: text-bottom;
+}
+
+.diff-details-box {
+    margin-top: 1.5rem;
+    line-height: 30px;
+    padding-bottom: 0.5em;
+    font-size: 0.75rem;
+}
+
+.boxed {
+    border: 1px solid #dbdbdb;
+    border-radius: 4px 4px 0 0;
+    border-collapse: collapse;
+}
+
+.file-box:not(:last-child) {
+    margin-bottom: 1.5rem;
+}
+
+.file-box element {
+    padding: 1.5em;
+}
+
+tr.project-entry > td:nth-child(2) {
+    width: 20%;
+    padding-left: 0px;
+}
+
+tr.project-entry > td:nth-child(3) {
+    width: 60%;
+    padding-left: 0px;
+}
+
+tr.project-entry > td:last-child {
+    width: 20%;
+}
+
+.diff-commit-info {
+    padding: 0.5em 0.75em;
+    font-size: 0.75rem;
+    line-height: 0;
+}
+
+.diff-commit-info .user {
+    display: inline-flex;
+    align-items: center;
+}
+
+.diff-commit-info .commits {
+    float: right;
+    display: flex;
+}
+
+.diff-commit-info .commits > :not(:last-child) {
+    margin-right: 0.75rem;
+}
+
+.file-box h4.file-header,
+h4.project-header,
+.commit h4.header,
+.file-box h4.diff-header,
+.comment h4.header {
+    border-bottom: 1px solid #dbdbdb;
+    border-radius: 4px 4px 0 0;
+    background-color: whitesmoke;
+    color: #363636;
+    font-size: 1.25em;
+    line-height: 1.25;
+    padding: 0.5em 0.75em;
+    margin-bottom: 0em;
+}
+
+.file-box h4.project-header,
+.commit h4.header,
+.file-box h4.diff-header {
+    font-size: 1.1em;
+    font-weight: normal;
+}
+
+.comment .boxed h4.header {
+    font-size: 1.0em;
+    font-weight: normal;
+}
+
+.file-box h4.project-header .commit-title {
+    font-size: 0.9em;
+}
+
+h4.project-header .toggle .icon {
+    vertical-align: bottom;
+}
+
+.file-box h4.project-header .description > hr + div,
+.commit h4.header .description {
+    font-size: 0.8em;
+    padding: 0em 1.0em;
+    color: #727272;
+}
+
+.file-box > div {
+    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.file-box .file-content .markdown {
+    padding: 3.0em;
+}
+
+.file-box .file-content .section {
+    padding: 1.5em;
+}
+
+
+.file-box .file-content .code {
+    
+}
+
+.content .file-box .project-entry td,
+.content .file-box .project-entry tr,
+.file-box .project-entry tr,
+.file-box .project-entry td {
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+.file-box .diff-header + div {
+    padding: 0;
+}
+
+.content .file-box .code td,
+.content .file-box .code tr,
+.file-box .code tr,
+.file-box .code td,
+.content .file-box .diff td,
+.content .file-box .diff tr,
+.file-box .diff tr,
+.file-box .diff td {
+    font-size: 12px;
+    line-height: 21px;
+    padding: 0em;
+    border-top: none;
+    border-bottom: none;
+    font-family: Consolas,Menlo,Monaco,"Lucida Console",monospace;
+}
+
+.line-num {
+    background-color: #fafafa;
+    color: #a7a7a7;
+    text-align: right;
+    min-width: 20px;
+}
+
+.file-box table.code .line-num {
+    min-width: 30px;
+}
+
+.content .file-box .code td.line-code,
+.content .file-box .code td.line-marker,
+.content .file-box .diff td.line-code,
+.content .file-box .diff td.line-marker {
+    padding-left: 10px;
+}
+
+.content .file-box .code td.line-code pre,
+.content .file-box .diff td.line-code pre {
+    background-color: inherit;
+    font-size: inherit;
+    font-family: inherit;
+    padding: inherit;
+    min-height: 21px;
+    padding-left: 0;
+}
+
+.content .file-box .code td.line-num,
+.content .file-box .diff td.line-num {
+    padding: 0 5px;
+    border-right: 1px solid #dbdbdb;
+}
+
+.line-num,
+.line-marker {
+    width: 1%;
+    cursor: default;
+    user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+}
+
+[data-line-num]::before {
+    content: attr(data-line-num);
+}
+
+.code {
+    font-family: Consolas,Menlo,Monaco,"Lucida Console",monospace;
+}
+
+.code.add {
+    background-color: #e6ffed;
+}
+
+.code.add .line-marker {
+    color: #1dca4e;
+}
+
+.code.del {
+    background-color: #ffeef0;
+}
+
+.code.del .line-marker {
+    color: #ff576b;
+}
+
+.code.plain {
+    
+}
+
+.code.hunk {
+    background-color: #f0f0f0;
+    color: grey;
+}
+
+.code.hunk > td.line-num {
+    background-color: #f0f0f0;
+    border-right: none;
+}
+
+.content .file-box tr.code.hunk td {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.file-diff-counter {
+    display: inline-block;
+    color: grey;
+    font-size: 0.75rem;
+    line-height: inherit;
+    margin-right: 12px;
+}
+
+.add {
+    height: inherit;
+    background-color: #1dca4e;
+}
+
+.del {
+    height: inherit;
+    background-color: #ff576b;
+}
+
+.count-bar {
+    height: 12px;
+    width: 40px;
+    display: inline-block;
+    border: none;
+    color: #1dca4e;
+    background-color: #ff576b;
+}
+
+.count-bar::-webkit-progress-bar {
+    background-color: #ff576b;
+}
+
+.count-bar::-webkit-progress-value {
+    background-color: #1dca4e;
+}
+
+.count-bar::-moz-progress-bar {
+    background-color: #1dca4e;
+}
+
+.count-bar::-ms-fill {
+    border: none;
+}
+
+.navbar-item.has-zg-icon span {
+    padding-left: 1rem;
+}
+
+.navbar-item.has-zg-icon span.icon {
+    padding-left: unset;
+}
+
+.panel-header span.image,
+.panel-block span.image,
+.file-box span.image {
+    vertical-align: text-bottom;
+    display: inline-block;
+}
+
+.image img.is-square-rounded {
+    border-radius: 10%;
+}
+
+.sha {
+    font-family: Consolas,Menlo,Monaco,"Lucida Console",monospace;
+}
+
+.diff-details-box span.icon,
+.project-header > a.tag.sha {
+    vertical-align: text-bottom;
+}
+
+.login-box {
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    color: #4a4a4a;
+    display: block;
+    padding: 1.25rem;
+    margin-top: 5rem;
+}
+
+.login-box .avatar {
+    margin-top: -70px;
+    padding-bottom: 20px;
+}
+
+.signup-box {
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+    color: #4a4a4a;
+    display: block;
+    padding: 1.25rem;
+}
+
+.badge:not(body) {
+    align-items: center;
+    background-color: rgba(27, 31, 35, 0.08);
+    border-radius: 4px;
+    color: #4a4a4a;
+    display: inline-flex;
+    font-size: 0.75rem;
+    justify-content: center;
+    line-height: 1.5;
+    margin-left: 0.5em;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    white-space: nowrap;
+}
+
+.button.is-primary .badge,
+.button.is-primary:active .badge,
+.button.is-primary.is-active .badge {
+    background-color: rgba(27, 31, 35, 0.2);
+    color: #fff;
+}
+
+.avatar img {
+    background: #fff;
+    border-radius: 10%;
+    -webkit-box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+}
+
+.menu.content .avatar img {
+    border-radius: 3%;
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    min-height: 100%;
+    min-width: 200px;
+}
+
+.metas.field.has-addons .control > .button:hover {
+    color: #3273dc;
+    border-color: #dbdbdb;
+}
+
+:not(:last-child).metas.field {
+    margin-bottom: 0;
+}
+
+.metas.field.has-addons .control:not(:last-child) {
+    margin-right: 0px;
+}
+
+.metas.field.has-addons .control:not(:last-child) > .button {
+    border-right: none;
+}
+
+.metas.field.has-addons .control:not(:first-child) > .button {
+    border-left: none;
+}
+
+.metas :not(:active).button:focus,
+.metas :not(:active).button.is-focused,
+.issues-top-bar .buttons :not(:active).button:focus,
+.issues-top-bar .buttons :not(:active).button.is-focused,
+.labels-top-bar .buttons :not(:active).button:focus,
+.labels-top-bar .buttons :not(:active).button.is-focused,
+.project-header .level-right .control .buttons :not(:active).button:focus,
+.project-header .level-right .control .buttons :not(:active).button.is-focused {
+    box-shadow: none;
+}
+
+.metas .button:focus,
+.metas .button.is-focused,
+.issues-top-bar .buttons .button:focus,
+.issues-top-bar .buttons .button.is-focused,
+.labels-top-bar .buttons .button:focus,
+.labels-top-bar .buttons .button.is-focused,
+.project-header .level-right .control .buttons .button:focus,
+.project-header .level-right .control .buttons .button.is-focused {
+    border-color: #dbdbdb;
+}
+
+.commit hr,
+.issue-metas-box hr,
+.file-box hr,
+.dashboard hr,
+.menu hr {
+    background-color: #dbdbdb;
+    border: none;
+    display: block;
+    height: 1px;
+    margin: 0.75rem 0;
+}
+
+.issues-top-bar,
+.labels-top-bar {
+    display: table;
+    width: 100%;
+}
+
+.issues-top-bar .search-bar,
+.labels-top-bar .search-bar {
+    margin-right: 0.5em;
+    margin-bottom: 1rem;
+}
+
+.issues-box h4,
+.labels-box h4 {
+    border-radius: 4px 4px 0 0;
+    background-color: whitesmoke;
+    color: #363636;
+    font-size: 1.0em;
+    line-height: 1.75;
+    padding: 0.5em 0.75em;
+    margin-bottom: 0em;
+}
+
+.issues-box h4 a,
+.issues-box .issue-header a,
+.issue-metas-box a,
+.issue-metas-box a.is-active span:last-child,
+.labels-box h4 a,
+.labels-box .label-header a {
+    color: #363636;
+}
+
+.issues-box h4 a:not(:first-child),
+.labels-box h4 a:not(:first-child) {
+    margin-left: 0.75em;
+    font-weight: 400;
+}
+
+.issues-box h4 a span,
+.labels-box h4 a span {
+    vertical-align: middle;
+}
+
+article.issue {
+    padding: 0.5em 0.75em;
+}
+
+.issue-header,
+.label-header {
+    color: #363636;
+    font-size: 1.0rem;
+    line-height: 1.25;
+    align-items: center;
+    font-weight: 600;
+    justify-content: space-between;
+    position: relative;
+}
+
+.toggle {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    color: #363636;
+    border: none;
+    cursor: pointer;
+    pointer-events: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: 0;
+    height: 20px;
+    max-height: 20px;
+    max-width: 20px;
+    min-height: 20px;
+    min-width: 20px;
+    outline: none;
+    position: relative;
+    vertical-align: top;
+    width: 20px;
+}
+
+.issue-header .comments,
+.label-header .comments,
+.issue-header .assignee,
+.label-header .assignee {
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-left: 0.75rem;
+}
+
+.description {
+    padding-bottom: 0.75em;
+}
+
+.label-header .description {
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.issue-header-right,
+.label-header-right,
+.right {
+    float: right;
+}
+
+.issue-header-right a > span.icon,
+.label-header-right a > span.icon {
+    vertical-align: middle;
+}
+
+.issue-body,
+.label-body {
+    color: #4a4a4a;
+    padding: 1.25em 0.75em;
+    font-size: 0.8rem;
+}
+
+.issue-footer {
+    color: #4a4a4a;
+    padding-top: 0.5em;
+    font-size: 0.75rem;
+}
+
+.issue-footer a {
+    color: #4a4a4a;
+}
+
+.issue-footer a:hover {
+    color: #3273dc;
+}
+
+.issue-footer .labels-box {
+    float: right;
+}
+
+.issue-footer .labels-box a.tag:hover {
+    text-decoration: none;
+}
+
+.new-issue-container,
+.new-issue-box,
+.issue-container,
+.new-comment-container,
+.comment {
+    display: flex;
+}
+
+.new-issue-container .avatar > img,
+.issue-container .avatar img {
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+    min-height: 48px;
+    margin-right: 1.0em;
+}
+
+.new-issue-box,
+.issue-timeline {
+    width: 75%;
+    height: 75%;
+    margin-right: 3%;
+}
+
+.issue-header .index {
+    color: #a7a7a7;
+    margin-right: 0.5rem;
+    font-weight: 200;
+    font-size: 1.75rem;
+}
+
+.title,
+.menu.content h2 {
+    font-weight: normal;
+}
+
+h2.title:not(:last-child) {
+    margin-bottom: 0.75rem;
+}
+
+label.label {
+    font-weight: 600;
+}
+
+.content .issue-header .subheader .tag > .icon {
+    margin-right: 0.25rem;
+}
+
+.new-comment-box,
+.new-issue-box > .avatar + div ,
+.comment .boxed {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+}
+
+.comment {
+    margin-right: 0.75em;
+}
+
+.comment .boxed > h4.header + div {
+    padding: 0.75em;
+}
+
+.new-issue-box > .avatar + div,
+.new-comment-box {
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    margin-right: 0.75em;
+    padding: 0.75em;
+}
+
+.new-issue-box > .avatar + div div:not(:last-child),
+.new-comment-box div:not(:last-child),
+.comment {
+    margin-bottom: 0.75em;
+}
+
+.new-issue-box .tabs-container,
+.new-comment-box .tabs-container {
+    margin: 0em -0.75em;
+}
+
+.new-issue-box .tabs-container ul,
+.new-comment-box .tabs-container ul {
+    margin: 0em 0.75em;
+}
+
+.new-issue-box .tabs-container ul li + li,
+.new-comment-box .tabs-container ul li + li {
+    margin: 0em;
+}
+
+.new-issue-box [id^=tab-content-],
+.new-issue-container .new-issue-box textarea,
+.new-comment-box [id^=tab-content-],
+.new-comment-container .new-comment-box textarea {
+    min-height: 200px;
+}
+
+.issue-metas-box {
+    margin-left: 0.5rem;
+}
+
+.issue-metas-box div.panel-block {
+    padding: 0.5em;
+}
+
+.issue-metas-box span.subtitle + .dropdown {
+    vertical-align: auto;
+}
+
+.issue-metas-box .labels-box {
+    margin-top: 0.5rem;
+}
+
+.labels-box {
+    margin-bottom: 0.5rem;
+}
+
+.dropdown .panel-block .image,
+.button .image,
+.user .image {
+    margin-right: 0.25rem;
+}
+
+/* We need to use this workaround until CSS3's line-clamp gets widely adopted */
+.line-clamp-1 {
+    position: relative;
+    max-height: 1.2rem; /* exactly one line */
+    overflow: hidden;
+}
+
+.line-clamp-2 {
+    position: relative;
+    max-height: 2.4rem; /* exactly two lines */
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    position: relative;
+    max-height: 3.6rem; /* exactly three lines */
+    overflow: hidden;
+}
+
+.line-clamp-1:after,
+.line-clamp-2:after,
+.line-clamp-3:after {
+    content: "";
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 15%;
+    height: 1.2rem;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+}
+
+input[name=color].input {
+    width: auto;
+}
+
+.search-bar {
+    box-sizing: border-box;
+    clear: both;
+    font-size: 1rem;
+    position: relative;
+    text-align: left;
+    width: 30%;
+}
+
+.search-bar .input:focus ~ .icon,
+.search-bar .select:focus ~ .icon {
+    color: #7a7a7a;
+}
+
+.search-bar .input.is-small ~ .icon,
+.search-bar .select.is-small ~ .icon {
+    font-size: 0.75rem;
+}
+
+.search-bar .input.is-medium ~ .icon,
+.search-bar .select.is-medium ~ .icon {
+    font-size: 1.25rem;
+}
+
+.search-bar .input.is-large ~ .icon,
+.search-bar .select.is-large ~ .icon {
+    font-size: 1.5rem;
+}
+
+.search-bar .icon {
+    color: #dbdbdb;
+    height: 2.25em;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    width: 2.25em;
+    z-index: 4;
+}
+
+.search-bar .input,
+.search-bar .select select {
+    padding-left: 2.25em;
+}
+
+.search-bar .icon.is-left {
+    left: 0;
+}
+
+.error {
+    min-height: calc(100vh - 3.25rem);
+    min-width: 768px;
+    padding: 0 30%;
+    margin-top: -3.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.error .image {
+
+}
+
+.error .title {
+
+}
+
+.error .message {
+    
+}
+
+.content .error {
+    min-height: auto;
+    margin-top: 3.25rem;
+}
+
+.info {
+    min-height: calc(100vh - 12.25rem);
+    min-width: 768px;
+    padding: 0 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.info .image {
+
+}
+
+.info .title {
+
+}
+
+.info .message {
+    
+}
+
+.color {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+}
+
+.color > input[type="color"] {
+    opacity: 0;
+	display: block;
+	width: 14px;
+	height: 14px;
+	border: none;
+}
+
+.panel-block .color {
+    margin-right: 0.5rem;
+}
+
+.labels-box {
+    
+}
+
+.labels-box .project-header > span span {
+    vertical-align: middle;
+}
+
+.labels-box .tag:not(:last-child) {
+    margin-right: 0.5em;
+    margin-bottom: 0.5rem;
+}
+
+.labels-box .label-header .tag {
+    margin-bottom: 0;
+}
+
+.labels-box .tag .image {
+    margin-left: -0.5rem;
+    margin-right: 0.25rem;
+}
+
+.labels-box li.label {
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+}
+
+div[id=new-label] {
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    margin-bottom: 1.0rem;
+    padding: 0.5rem 0.75rem;
+}
+
+div[id=new-label] .label-header {
+    padding: 0.75em;
+    padding-bottom: 0;
+    border: 0;
+}
+
+.label-header a.tag:hover {
+    text-decoration: none;
+}
+
+div[id=new-label] .label-body,
+.issue-metas-box .labels-box {
+    border: 0;
+}
+
+.label-body form {
+    display: inline-flex;
+    width: 100%;
+}
+
+.label-body .color {
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    margin-right: 0.25rem;
+}
+
+.label-body .color > input[type="color"] {
+    opacity: 0;
+	display: block;
+	width: inherit;
+	height: inherit;
+	border: none;
+}
+
+.label-body .field {
+    margin-bottom: 0px;
+}
+
+.label-body .field:not(:last-child) {
+    margin-right: 0.75rem;
+}
+
+.label-header-right a {
+    font-size: 1.0rem;
+    font-weight: 400;
+}
+
+.label-header-right a span {
+    vertical-align: middle
+}
+
+.label-header-right a:not(:last-child),
+.is-flex.is-grouped .field:not(:last-child) {
+    margin-right: 0.75rem;
+}
+
+.label-header-right a span:hover {
+    text-decoration: underline;
+}
+
+.label-body form div:last-child {
+    margin-bottom: 5px;
+    display: inline-flex;
+    align-self: flex-end;
+}
+
+.label-body form div:nth-of-type(2) {
+    width: 50%;
+}
+
+.label-body form div:nth-of-type(2) .control {
+    width: 100%;
+}
+
+
+.label-body form > div:last-child input.button:not(:last-child) {
+    margin-right: 0.25rem;
+}
+
+.new-project-form {
+    width: 700px;
+    margin: 40px auto 0;
+}
+
+.new-project-form .slash {
+    padding-top: 2.0rem;
+    margin: 0 8px;
+    font-size: 1.25rem;
+}
+
+.new-project-form .radio:not(:last-child) {
+    margin-bottom: 1.0rem;
+}
+
+.new-project-form .owner-projectname,
+.is-flex,
+.radio.has-icon,
+.new-project-form .checkbox {
+    display: flex;
+}
+
+.is-flex.is-grouped {
+
+}
+
+.radio.has-icon .icon {
+    height: 40px;
+    width: 40px;
+    align-self: center;
+    margin-left: 0.5rem;
+}
+
+.radio.has-icon .icon .zg-icon {
+    mask-size: contain;
+    -webkit-mask-size: contain;
+}
+
+.radio.has-icon .icon + div,
+.checkbox input + div {
+    margin-left: 0.25rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.checkbox input + div {
+    margin-left: 0.75rem;
+}
+
+.new-project-form .radio + .radio {
+    margin: 0;
+}
+
+.radio.has-icon .header,
+.checkbox .header {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.issue-header .subheader {
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.issue-header .subheader > * {
+    vertical-align: middle;
+}
+
+.radio.has-icon .subheader,
+.checkbox .subheader {
+    margin-top: 0.15rem;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.dashboard {
+    display: flex;
+    min-height: calc(100vh - 3.25rem);
+}
+
+.dashboard-sidebar {
+    padding: 1.5rem;
+}
+
+.dashboard-sidebar:first-child {
+    border-right: 1px solid #dbdbdb;
+}
+
+.dashboard-sidebar:last-child {
+    border-left: 1px solid #dbdbdb;
+}
+
+.dashboard-content {
+    padding: 1.5rem;
+    width: 60%;
+}
+
+.dashboard-sidebar .search-bar {
+    width: initial;
+    margin-bottom: 0.75rem;
+}
+
+.dashboard-sidebar .context-projects hr,
+.dashboard-sidebar .context-organisations hr {
+    margin: 0.25rem 0;
+}
+
+.context-projects .title-bar,
+.context-organisations .title-bar {
+    margin-bottom: 0.5rem;
+}
+
+.context-projects .title-bar span:first-child,
+.context-organisations .title-bar span:first-child {
+    font-weight: 600;
+}
+
+.context-projects {
+    margin-bottom: 1.5rem;
+}
+
+.context-organisations {
+    margin-top: 1.5rem;
+}
+
+.context-projects .title-bar > :last-child,
+.context-organisations .title-bar > :last-child {
+    margin-left: 0.5rem;
+}
+
+.dashboard-sidebar .dropdown-menu {
+    white-space: nowrap;
+}
+
+.dashboard-sidebar .dropdown-content :only-child.panel-block {
+    border-radius: 0 0 4 4px;
+}
+
+.issue-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.issue-timeline::before {
+    content: "";
+    background-color: #dbdbdb;
+    display: block;
+    width: 2px;
+    position: absolute;
+    left: 96px;
+    top: 0px;
+    bottom: 0px;
+    z-index: -1;
+}
+
+.file-header span.size {
+    font-size: 0.7em;
+    font-weight: 400;
+    color: #727272;
+}
+
+.issue-header-wrapper {
+    background-color: #fff;
+    padding-top: 15px;
+    margin-top: -15px;
+}
+
+.email-list {
+    align-content: center;
+}
+
+.email-list .email {
+    min-height: 42px;
+    margin-left: 0.75rem;
+}
+
+article.email span.address,
+article.email span.tag {
+    vertical-align: middle;
+}
+
+article.email span.address,
+article.email .labels-box {
+    margin-left: 0.75rem;
+}
+
+.email:not(:last-child) {
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.email .labels-box .tag:not(:last-child) {
+    margin-left: 0;
+    margin-right: 0.5em;
+    margin-bottom: 0;
+}
+
+.email button.button {
+    border: none;
+}
+
+.modal header.modal-card-head p,
+.modal section.modal-card-body,
+.message-header h2.title {
+    margin-bottom: 0;
+}
+
+.message-header h2.title {
+    color: #fff;
+}
+
+.field.is-horizontal .control:not(:last-child) {
+    margin-right: 0.75rem;
+}
+
+.modal.is-danger {
+    background-color: #fff5f7;
+}
+
+.modal.is-danger .modal-card-head {
+    color: #fff;
+    background-color: #ff3860;
+}
+
+.modal.is-danger .modal-card-head .modal-card-title {
+    color: #fff;
+}
+
+.message-body + .message-body {
+    border-width: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}

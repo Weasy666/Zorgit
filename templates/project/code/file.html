@@ -1,0 +1,28 @@
+{% let entry = entries.as_ref().unwrap().get(0) -%}
+<div class="file-box boxed">
+  <h4 class="file-header">
+    {{ entry.as_ref().unwrap().1.name }} <span class="size">| {{ entry.as_ref().unwrap().1.size.humanize() }}</span>
+  </h4>
+
+  <div class="file-content">
+    {% if entry.as_ref().unwrap().1.is_binary() %}
+    This is a binary file. Please download it to view its content.
+    {% else if entry.as_ref().unwrap().1.is_markdown() -%}
+    <article class="markdown">
+      {{ entry.as_ref().unwrap().1.content_as_markdown_with_root(project.url_relative().borrow())|safe}}
+    </article>
+    {% else -%}
+    <table class="code">
+      <tbody>
+        {% for line in entry.as_ref().unwrap().1.lines_highlighted() -%}
+        <tr class="{{ line.css_class() }}">
+          <td class="line-num" data-line-num="{{ line.new_num() }}"></td>
+          <td class="line-marker">{{ line.marker }}</td>
+          <td class="line-code">{{ line.content_as_string()|safe}}</td>
+        </tr>
+        {% endfor -%}
+      </tbody>
+    </table>
+    {% endif -%}
+  </div>
+</div>

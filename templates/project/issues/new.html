@@ -1,0 +1,56 @@
+{% block title -%}New Issues • {{ project.owner.username }}/{{ project.name }} • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "../base.html" %}
+
+{% block tab_content -%}
+<form id="new-issue-form" action="{{ project.url_relative() }}/issues/new" method="post">
+  <input name="user_id" value="{{ user.as_ref().unwrap().id }}" type="hidden">
+  <div id="new-issue-container" class="new-issue-container">
+    <div class="new-issue-box">
+      <a class="avatar" href="{{ user.as_ref().unwrap().url_relative() }}">
+        {% if user.as_ref().is_some() -%}
+        <img class="is-square-rounded" src="{{ user.as_ref().unwrap().avatar.to_str().unwrap() }}" />
+        {% else -%}
+        <img class="is-square-rounded" src="https://bulma.io/images/placeholders/128x128.png" />
+        {% endif -%}
+      </a>
+      <div id="new-issue-box">
+        <div class="control">
+          <input name="title" id="issue_title" class="input" autofocus="" required="" placeholder="Title" value="">
+        </div>
+        <div class="tabs-container">
+          <div class="tabs">
+            <ul class="">
+              <li id="tab-write" class="is-active" data-tab-content="tab-content-write">
+                <a>
+                  <span class="icon is-small"><i class="zg-icon zg-file-edit" aria-hidden="true"></i></span>
+                  <span>Write</span>
+                </a>
+              </li>
+              <li id="tab-preview" class=""  data-tab-content="tab-content-preview">
+                <a>
+                  <span class="icon is-small"><i class="zg-icon zg-eye" aria-hidden="true"></i></span>
+                  <span>Preview</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div id="tab-content-write">
+            <textarea name="content" id="content" class="textarea"></textarea>
+          </div>
+          <div id="tab-content-preview" class="markdown is-hidden">
+            Loading...
+          </div>
+        </div>
+        <div>
+          <input class="button is-primary is-pulled-right" type="submit" value="Create Issue">
+        </div>
+      </div>
+    </div>
+    <div id="issue-metas-box" class="issue-metas-box">
+    {% include "metas.html" -%}
+    </div>
+  </div>
+</form>
+{% endblock -%}

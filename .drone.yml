@@ -1,0 +1,17 @@
+kind: pipeline
+name: rust-nightly
+
+steps:
+- name: build
+  image: rustlang/rust:nightly
+  pull: always
+  commands:
+    - apt-get update -y
+    - apt-get update
+    - apt-get install -y --no-install-recommends cmake
+    - cargo build --verbose
+  trigger:
+    event: 
+      - push
+    branch:
+      - master

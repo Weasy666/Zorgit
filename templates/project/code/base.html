@@ -1,0 +1,228 @@
+{% block title -%}{{ project.owner.username }}/{{ project.name }} • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "../base.html" %}
+
+<!-- Source Code -->
+{% block tab_content -%}
+{% if project.is_empty -%}
+{% include "empty.html" -%}
+{%- else %}
+<div class="description">
+  {% if project.description.is_some() -%}
+    {{ project.description.as_ref().unwrap() }}
+  {%- else %}
+    <i>No Description</i>
+  {%- endif %}
+</div>
+
+<div id="topics-field" class="field">
+  {%- if user.is_some() && user.as_ref().unwrap() == project.owner.borrow() -%}
+  <form id="project-manage-topics-form" class="" action="{{ project.url_relative() }}/topics" method="post">
+    <div id="topics-tags-box" class="labels-box">
+      {%- if project.topics.is_some() -%}
+      {%- for topic in project.topics.as_ref().unwrap() -%}
+      <span name="t_{{ topic.id }}" data-value="{{ topic.id }}" class="tag" >{{ topic.name }}<a class="delete is-small is-hidden"></a></span>
+      {%- endfor -%}
+      {%- endif -%}
+    </div>
+    <a id="topics-manage">Manage Topics</a>
+    <div id="project-manage-topics" class="control is-hidden">
+      <label class="label">Topics</label>
+        <input name="_method" value="put" type="hidden">
+        <input name="id" value="{{ project.id }}" type="hidden">
+        <input id="topic-ids" name="topic_ids" value="{%- if project.topics.is_some() -%}
+          {%- for t in project.topics.as_ref().unwrap() -%}
+            {%- if loop.last -%}
+              {{- t.id -}}
+            {%- else -%}
+              {{- t.id -}},
+            {%- endif -%}
+          {%- endfor -%}
+          {%- endif -%}" type="hidden">
+        <div class="field is-grouped">
+        <span class="control has-icons-left is-expanded">
+          <input id="topics-search" class="input" type="text" placeholder="Filter settings..." autocomplete="off">
+          <span class="icon is-left">
+            <i class="zg-icon zg-search" aria-hidden="true"></i>
+          </span>
+          <div id="topics-search-autocomplete" class="dropdown-menu">
+            <div class="dropdown-content">
+              <span class="dropdown-item">Searching...</span>
+            </div>
+          </div>
+        </span>
+        <span class="control">
+          <input id="topic-submit" class="button is-primary" value="Finish">
+        </span>
+        </div>
+    </div>
+  </form>
+  {%- else -%}
+  <div id="topics-tags-box" class="labels-box">
+    {%- if project.topics.is_some() -%}
+    {%- for topic in project.topics.as_ref().unwrap() -%}
+    <span class="tag" >{{ topic.name }}</span>
+    {%- endfor -%}
+    {%- endif -%}
+  </div>
+  {%- endif -%}
+</div>
+
+<div class="metas field has-addons">
+  <p class="control is-one-quarter">
+    <a class="button" href='{{ project.url_relative() }}/commits/{{ branch.as_ref().unwrap_or("master".to_string().borrow()) }}'>
+      <span class="icon">
+        <i class="zg-icon zg-history" aria-hidden="true"></i>
+      </span>
+      <span>{{ num_commits }} commits</span>
+    </a>
+  </p>
+  <p class="control is-one-quarter">
+    <a class="button" href="{{ project.url_relative() }}/branches">
+      <span class="icon">
+        <i class="zg-icon zg-git-branch" aria-hidden="true"></i>
+      </span>
+      <span>{% if branches.is_some() %}{{branches.as_ref().unwrap().len()}}{% else %}0{% endif %} branches</span>
+    </a>
+  </p>
+  <p class="control is-one-quarter">
+    <a class="button" href="{{ project.url_relative() }}/contributors">
+      <span class="icon">
+        <i class="zg-icon zg-users" aria-hidden="true"></i>
+      </span>
+      <span>{{ num_contributors }} contributors</span>
+    </a>
+  </p>
+  <p class="control is-one-quarter">
+    <a class="button" {% if license.is_some() %}href='{{ project.url_relative() }}/branches/{{ branch.as_ref().unwrap() }}/{{ license.as_ref().unwrap().relative_url() }}'{% endif %}>
+      <span class="icon">
+        <i class="zg-icon zg-license" aria-hidden="true"></i>
+      </span>
+      <span>{% if license.is_some() %}{{ license.as_ref().unwrap().name }}{% else %}No license{% endif %}</span>
+    </a>
+  </p>
+</div>
+
+<div class="is-flex">
+  <div id="branch-dropdown" class="dropdown margin-bottom-0-75">
+    <button id="branch-dropdown-trigger" class="button dropdown-trigger is-medium-small" aria-haspopup="true" aria-controls="dropdown-menu">
+      <span class="icon is-tiny">
+        <i class="zg-icon zg-git-branch" aria-hidden="true"></i>
+      </span>
+      <span>Branch: <strong>{{ branch.as_ref().unwrap_or("None".to_string().borrow()) }}</strong></span>
+      <span class="icon is-small">
+        <i class="zg-icon zg-triangle-down" aria-hidden="true"></i>
+      </span>
+    </button>
+    <div id="branch-dropdown-menu" class="dropdown-menu" role="menu">
+      <div class="dropdown-content is-paddingless">
+        <nav class="panel">
+          <div class="panel-block">
+            <span class="control has-icons-left">
+            <fieldset disabled>
+              <input class="input is-small" type="text" placeholder="Filter branches or tags...">
+              <span class="icon is-small is-left">
+                <i class="zg-icon zg-search" aria-hidden="true"></i>
+              </span>
+            </fieldset disabled>
+            </span>
+          </div>
+          <p class="panel-tabs">
+            <a class="is-active">
+              <span class="icon is-small"><i class="zg-icon zg-git-branch" aria-hidden="true"></i></span>
+              Branches
+            </a>
+            <a>
+              <span class="icon is-small"><i class="zg-icon zg-tags" aria-hidden="true"></i></span>
+              Tags
+            </a>
+          </p>
+          {% if branches.is_some() -%}
+          {% for brnch in branches.as_ref().unwrap() -%}
+          {% if brnch == branch.as_ref().unwrap_or("None".to_string().borrow()) -%}
+          <a class="panel-block is-active" href="{{ project.url_relative() }}/branches/{{ brnch }}">
+            <span class="panel-icon">
+          {% else -%}
+          <a class="panel-block" href="{{ project.url_relative() }}/branches/{{ brnch }}">
+            <span class="panel-icon is-invisible">
+          {% endif -%}
+              <i class="zg-icon zg-check" aria-hidden="true"></i>
+            </span>
+            {{ brnch }}
+          </a>
+          {% endfor -%}
+          {% else -%}
+          <span>No branches found!!!</span>
+          {% endif -%}
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <div class="field has-addons is-medium-small" style="margin-left: auto;">
+    <p class="control">
+      <a id="project-clone-https" class="button is-primary is-outlined is-active" data-url="{{ project.clone_url_http() }}">
+        HTTPS
+      </a>
+    </p>
+    <p class="control">
+      <a id="project-clone-ssh" class="button" data-url="git@localhost:{{ project.url_relative() }}.git">
+        SSH
+      </a>
+    </p>
+    <p class="control is-expanded">
+      <input id="project-clone-url" class="input" type="text" value="{{ project.clone_url_http() }}" readonly>
+    </p>
+    <p class="control">
+      <a id="project-clone-clipboard" class="button">
+        <span class="icon">
+          <i class="zg-icon zg-copy" aria-hidden="true"></i>
+        </span>
+      </a>
+    </p>
+  </div>
+
+  {# <div> #}
+    {# <nav class="breadcrumb is-medium-small level-item" aria-label="breadcrumbs"> #}
+      {# <ul> #}
+        {# <li> #}
+          {# <a href="{{ project.url_relative() }}" aria-current="project">{{ project.name }}</a> #}
+        {# </li> #}
+        {# {% for component in entries.as_ref().unwrap().get(0).unwrap().1.root_as_components() -%} #}
+        {# <li> #}
+          {# {% if !loop.last || is_file -%} #}
+          {# <a href="{{ project.url_relative() }}">{{ component }}</a> #}
+          {# {%- else %} #}
+          {# <span>{{ component }}</span> #}
+          {# {% endif -%} #}
+        {# </li> #}
+        {# {% endfor -%} #}
+        {# {% if is_file -%} #}
+        {# <li> #}
+          {# <span>{{ entries.as_ref().unwrap().get(0).unwrap().1.name }}</span> #}
+        {# </li> #}
+        {# {%- endif %} #}
+      {# </ul> #}
+    {# </nav> #}
+  {# </div> #}
+</div>
+
+{% if entries.is_some() -%}
+{% if is_file -%}
+{% include "file.html" -%}
+{%- else %}
+{% include "folder.html" -%}
+{%- endif %}
+{%- else %}
+<div class="error">
+  <div>
+    <div class="image">
+    IMAGE GOES HERE!!<br>
+    <span class="is-size-1">404</span>
+    </div>
+    <h2 class="title">oh, it’s gone :(</h2>
+    <p class="message">Rocky has eaten the entry you are looking for, please try again or choose something that Rocky didn't already gulp down.</p>
+  </div>
+</div>
+{% endif -%}
+{% endif -%}
+{% endblock -%}

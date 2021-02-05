@@ -1,0 +1,141 @@
+{% block title -%}Account • Settings • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "base.html" %}
+
+{% block settings_page -%}
+<section>
+  <h2 class="title">Change Username</h2>
+  <hr/>
+  <form id="change_username" class="" action="/user/settings/account" method="post">
+    <input name="_method" value="patch" type="hidden">
+    <input name="id" value="{{ user.as_ref().unwrap().id }}" type="hidden">
+    <div>
+      <label class="label">Username</label>
+      <div class="field has-addons">
+        <div class="control has-icons-left" style="width: 100%;">
+          <input class="input" name="username" value="{{ user.as_ref().unwrap().username }}" placeholder="Your username" type="text" required>
+          <span class="icon is-small is-left">
+            <i class="zg-icon zg-user"></i>
+          </span>
+        </div>
+        <div class="control">
+          <input class="button is-primary" type="submit" value="Change Username">
+        </div>
+      </div>
+    </div>
+  </form>
+</section>
+
+<section>
+  <h2 class="title">Change Password</h2>
+  <hr/>
+  <form id="change_password" class="" action="/user/settings/account/password" method="post">
+    <input name="_method" value="patch" type="hidden">
+    <input name="id" value="{{ user.as_ref().unwrap().id }}" type="hidden">
+    <div>
+      <div class="field">
+        <label class="label">Current Password</label>
+        <div class="control has-icons-left">
+          <input class="input" name="password_old" value="" placeholder="Enter our current password for verification" type="password" required>
+          <span class="icon is-small is-left">
+            <i class="zg-icon zg-lock"></i>
+          </span>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">New Password</label>
+        <div class="control has-icons-left">
+          <input class="input" name="password_new" value="" placeholder="Enter your new password" type="password" required>
+          <span class="icon is-small is-left">
+            <i class="zg-icon zg-lock"></i>
+          </span>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Repeat New Password</label>
+        <div class="control has-icons-left">
+          <input class="input" name="password_repeat" value="" placeholder="Repeat your new password" type="password" required>
+          <span class="icon is-small is-left">
+            <i class="zg-icon zg-lock"></i>
+          </span>
+        </div>
+      </div>
+      <div>
+        <input class="button is-primary" type="submit" value="Change Password">
+      </div>
+    </div>
+  </form>
+</section>
+
+<section>
+  <h2 class="title">Manage Email Addresses</h2>
+  <hr/>
+  <div class="email-list">
+    {%- for email in emails %}
+    <article class="email">
+        <span class="address">{{ email.address }}</span>
+        <span class="labels-box">
+        {%- if email.is_primary %}<span class="tag is-primary">Primary</span>{% endif -%}
+        {%- if email.activated_at.is_some() %}<span class="tag is-info">Verified</span>{% else %}<span class="tag is-danger">Unverified</span>{% endif -%}
+        </span>
+        <span class="right is-flex">
+          <form id="email-notification-{{ email.id }}" action="/user/settings/account/email" method="post">
+            <input name="_method" value="patch" type="hidden">
+            <input name="id" value="{{ email.id }}" type="hidden">
+            <input name="address" value="{{ email.address }}" type="hidden">
+            <input name="is_primary" value="{{ email.is_primary }}" type="hidden">
+            <div class="control has-icons-left">
+              <span class="select">
+                <select name="notification">
+                  <option value="0" {% if models::Notification::Disabled == email.notification %}selected{% endif %}>Disabled</option>
+                  <option value="1" {% if models::Notification::Enabled == email.notification %}selected{% endif %}>Enabled</option>
+                  <option value="2" {% if models::Notification::OnMentions == email.notification %}selected{% endif %}>On Mentions</option>
+                </select>
+              </span>
+              <span class="icon is-tiny is-left">
+                <i class="zg-icon zg-bell"></i>
+              </span>
+            </div>
+          </form>
+
+          <form class="" action="/user/settings/account/email" method="post">
+            <input name="_method" value="patch" type="hidden">
+            <input name="id" value="{{ email.id }}" type="hidden">
+            <input name="address" value="{{ email.address }}" type="hidden">
+            <input name="is_primary" value="true" type="hidden">
+            <input name="notification" value="{{ email.notification.to_i16() }}" type="hidden">
+            <button class="button{% if email.is_primary %}"{% else %} tooltip is-tooltip-bottom" data-tooltip="Make Primary"{% endif %} type="submit" {% if email.is_primary %}disabled{% endif %}>
+              <span class="icon is-medium-small"><i class="zg-icon zg-star"></i></span>
+            </button>
+          </form>
+
+          <form class="" action="/user/settings/account/email" method="post">
+            <input name="_method" value="delete" type="hidden">
+            <input name="id" value="{{ email.id }}" type="hidden">
+            <input name="address" value="{{ email.address }}" type="hidden">
+            <button class="button" type="submit" {% if email.is_primary %}disabled{% endif %}>
+              <span class="icon is-medium-small"><i class="zg-icon zg-trash"></i></span>
+            </button>
+          </form>
+        </span>
+    </article>
+    {% endfor -%}
+  </div>
+  <hr/>
+  <div class="">
+    <form id="new_email" class="" action="/user/settings/account/email" method="post">
+      <label class="label">Add Email Address</label>
+      <div class="field has-addons">
+        <div class="control has-icons-left" style="width: 100%;">
+          <input class="input" name="address" value="" placeholder="Enter your new email address" type="email" required>
+          <span class="icon is-small is-left">
+            <i class="zg-icon zg-mail"></i>
+          </span>
+        </div>
+        <div class="control">
+          <input class="button is-primary" type="submit" value="Add Email">
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+{%- endblock %}

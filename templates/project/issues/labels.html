@@ -1,0 +1,124 @@
+{% block title -%}Labels • {{ project.owner.username }}/{{ project.name }} • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "../base.html" %}
+
+{% block tab_content -%}
+<div class="labels-top-bar">
+  <div class="search-bar is-pulled-left">
+    <input class="input" type="text" placeholder="Search all issues">
+    <span class="icon is-small is-left">
+      <i class="zg-icon zg-search"></i>
+    </span>
+  </div>
+  <div class="buttons has-addons is-pulled-left">
+    <a class="button is-primary" href="{{ project.url_relative() }}/issues/labels">
+      <span class="icon"><i class="zg-icon zg-tag"></i></span>
+      <span>Labels</span>
+      <span class="badge">{{ project.num_labels }}</span>
+    </a>
+    <a class="button" href="{{ project.url_relative() }}/milestones">
+      <span class="icon"><i class="zg-icon zg-milestone"></i></span>
+      <span>Milestones</span>
+      <span class="badge">{{ project.num_milestones }}</span>
+    </a>
+  </div>
+  <button id="new-label-button" class="button is-primary is-pulled-right">New Label</button>
+</div>
+
+<div id="new-label" class="label is-hidden">
+  <div class="label-header">
+    <a id="new-label-tag" class="tag is-medium" style="background-color: #00d1b2;">Label preview</a>
+  </div>
+  <div class="label-body">
+    <form action="{{ project.url_relative() }}/issues/labels/new" method="post" accept-charset="utf-8">
+      <div class="field">
+        <label class="label">Name</label>
+        <div class="control">
+          <input id="new-label-name-input" class="input" name="name" value="" placeholder="Label name" type="text" maxlength="50" autocomplete="off" required>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Description</label>
+        <div class="control">
+          <input class="input" name="description" value="" placeholder="Label description" type="text" autocomplete="off" required>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Color</label>
+        <div class="control">
+          <div id="new-label-color" class="color" style="background-color: #00d1b2;">
+            <input value="#00d1b2" type="color">
+          </div>
+          <input id="new-label-color-input" class="input" name="color" value="#00d1b2" type="text" pattern="#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})" placeholder="Hex Color" maxlength="7" size="7" autocomplete="off" required>
+        </div>
+      </div>
+      <div class="is-pulled-right">
+        <input name="cancel" class="button" type="reset" value="Cancel">
+        <input name="save" class="button is-primary" type="submit" value="Create label">
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="labels-box" class="labels-box boxed">
+  <h4 class="project-header">
+    <span>
+      <span class="icon is-small"><i class="zg-icon zg-warning" aria-hidden="true"></i></span>
+      <span>{{ project.num_labels }} Labels</span>
+    <span>
+  </h4>
+
+  {% if labels.is_some() -%}
+  {% for label in labels.as_ref().unwrap() -%}
+  <li id="label-box-{{ label.id }}" class="label">
+    <div class="label-header">
+      <a class="tag is-medium" style="background-color: {{ label.color }};" href="{{ project.url_relative() }}/issues/labels/{{ label.id }}">{{ label.name }}</a>
+      <span class="description">
+        {{ label.description.as_ref().unwrap_or("".to_string().borrow()) }}
+      </span>
+      <span class="label-header-right">
+        <a>
+          <span class="icon is-medium-small"><i class="zg-icon zg-pencil"></i></span>
+          <span>Edit</span>
+        </a>
+        <a>
+          <span class="icon is-medium-small"><i class="zg-icon zg-trash"></i></span>
+          <span>Delete</span>
+        </a>
+      </span>
+    </div>
+    <div class="label-body is-hidden">
+      <form id="label-form-{{ label.id }}" action="{{ project.url_relative() }}/issues/labels/edit" method="post">
+        <input name="id" value="{{ label.id }}" type="hidden">
+        <input name="project_id" value="{{ label.project_id }}" type="hidden">
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control">
+            <input class="input" name="name" value="{{ label.name }}" type="text" placeholder="Label name" maxlength="50" autocomplete="off" required>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Description</label>
+          <div class="control">
+            <input class="input" name="description" value='{{ label.description.as_ref().unwrap_or("".to_string().borrow()) }}' type="text" placeholder="Label description" autocomplete="off" required>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Color</label>
+          <div class="control">
+            <div class="color" style="background-color: {{ label.color }};">
+              <input value="{{ label.color }}" type="color">
+            </div>
+            <input class="input" name="color" value="{{ label.color }}" type="text" pattern="#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})" placeholder="Hex Color" maxlength="7" size="7" autocomplete="off" required>
+          </div>
+        </div>
+        <div class="is-pulled-right">
+          <input name="cancel" class="button" type="reset" value="Cancel">
+          <input name="save" class="button is-primary" type="submit" value="Save changes">
+        </div>
+      </form>
+    </div>
+  </li>
+  {% endfor -%}
+  {% endif -%}
+</div>
+{% endblock -%}

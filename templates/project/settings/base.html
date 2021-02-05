@@ -1,0 +1,36 @@
+{% block title -%}{{ project.owner.username }}/{{ project.name }} Settings • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "../base.html" %}
+
+{% block tab_content -%}
+<div class="container is-flex">
+<!-- Side menu -->
+  <div class="menu side">
+    <nav class="panel boxed">
+      <div class="panel-block">
+        <span class="control has-icons-left">
+        <fieldset disabled>
+          <input class="input is-small" type="text" placeholder="Filter settings...">
+          <span class="icon is-small is-left">
+            <i class="zg-icon zg-search" aria-hidden="true"></i>
+          </span>
+        </fieldset disabled>
+        </span>
+      </div>
+      <a class="panel-block {% if settings_tab == Tab::Project -%}is-active{% endif -%}" href="{{ project.url_relative() }}/settings">
+        <span>Project</span>
+      </a>
+      <a class="panel-block {% if settings_tab == Tab::Collaboration -%}is-active{% endif -%}" href="{{ project.url_relative() }}/settings/collaboration">
+        <span>Collaboration</span>
+      </a>
+      <a class="panel-block {% if settings_tab == Tab::Branches -%}is-active{% endif -%}" href="{{ project.url_relative() }}/settings/branches">
+        <span>Branches</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Menu pages -->
+  <div class="menu content">
+  {% block settings_page %}Settings pages{% endblock %}
+  </div>
+</div>
+{% endblock -%}

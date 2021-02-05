@@ -1,0 +1,88 @@
+{% block title -%}Commits • {{ project.owner.username }}/{{ project.name }} • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "base.html" %}
+
+{% block tab_content -%}
+<div id="branch-dropdown" class="dropdown margin-bottom-0-75">
+  <button id="branch-dropdown-trigger" class="button dropdown-trigger is-small" aria-haspopup="true" aria-controls="dropdown-menu">
+    <span class="icon is-tiny">
+      <i class="zg-icon zg-git-branch" aria-hidden="true"></i>
+    </span>
+    <span>Branch: <strong>{{ branch.as_ref().unwrap_or("None".to_string().borrow()) }}</strong></span>
+    <span class="icon is-small">
+      <i class="zg-icon zg-triangle-down" aria-hidden="true"></i>
+    </span>
+  </button>
+  <div id="branch-dropdown-menu" class="dropdown-menu" role="menu">
+    <div class="dropdown-content is-paddingless">
+      <nav class="panel">
+        <div class="panel-block">
+          <span class="control has-icons-left">
+            <input class="input is-small" type="text" placeholder="Filter branches or tags...">
+            <span class="icon is-small is-left">
+              <i class="zg-icon zg-search" aria-hidden="true"></i>
+            </span>
+          </span>
+        </div>
+        <p class="panel-tabs">
+          <a class="is-active">
+            <span class="icon is-small"><i class="zg-icon zg-git-branch" aria-hidden="true"></i></span>
+            Branches
+          </a>
+          <a>
+            <span class="icon is-small"><i class="zg-icon zg-tags" aria-hidden="true"></i></span>
+            Tags
+          </a>
+        </p>
+        {% if branches.is_some() -%}
+        {% for brnch in branches.as_ref().unwrap() -%}
+        {% if brnch == branch.as_ref().unwrap_or("None".to_string().borrow()) -%}
+        <a class="panel-block is-active" href="{{ project.url_relative() }}/commits/{{ brnch }}">
+          <span class="panel-icon">
+        {% else -%}
+        <a class="panel-block" href="{{ project.url_relative() }}/commits/{{ brnch }}">
+          <span class="panel-icon is-invisible">
+        {% endif -%}
+            <i class="zg-icon zg-check" aria-hidden="true"></i>
+          </span>
+          {{ brnch }}
+        </a>
+        {% endfor -%}
+        {% else -%}
+        <span>No branches found!!!</span>
+        {% endif -%}
+      </nav>
+    </div>
+  </div>
+</div>
+{{ num_commits }} commits
+
+<div id="issues-box" class="issues-box boxed">
+  {% for commit in commits -%}
+  <article class="issue">
+    <div class="issue-header">
+      <a href="{{ project.url_relative() }}/commits/{{ commit.id() }}">{{ commit.title().unwrap_or("".to_string()) }}</a>
+      <span class="issue-header-right">
+        {% if commit.description().is_some() %}
+        <a class="toggle">
+          <span class="icon"><i class="zg-icon zg-triangle-down"></i></span>
+        </a>
+        {% endif %}
+      </span>
+    </div>
+    <div class="issue-body is-hidden">
+      <div class="line-clamp-3">
+      {% if commit.description().is_some() %}
+        {{ commit.description().unwrap() }}
+      {% endif %}
+      </div>
+    </div>
+    <div class="issue-footer">
+      <a class="tag" href="{{ project.url_relative() }}/commits/{{ commit.id() }}">{{ commit.short_id() }}</a>
+      <span>
+        committed <span class="tooltip is-tooltip-bottom" data-tooltip="{{ commit.time().rfc3339() }}">{{ commit.time().humanize() }}</span> by <a href="{{ commit.author().unwrap().url_relative() }}">{{ commit.author().unwrap().username }}</a>
+      </span>
+    </div>
+  </article>
+  {% endfor -%}
+</div>
+{% endblock -%}

@@ -1,0 +1,105 @@
+<nav class="navbar is-primary has-shadow" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="/">
+      <img src="/static/img/zorgit.svg" height="auto">
+    </a>
+  </div>
+
+  <div class="navbar-menu">
+    <div class="navbar-start">
+      {% let usr = user.as_ref() -%}
+      {%- if usr.is_some() %}
+      <a class="navbar-item" href="{{ usr.unwrap().url_relative() }}/issues">
+        Issues
+      </a>
+      <a class="navbar-item" href="{{ usr.unwrap().url_relative() }}/pulls">
+        Pull Requests
+      </a>
+      {%- endif %}
+      <a class="navbar-item" href="/explore">
+        Explore
+      </a>
+    </div>
+
+    <div class="navbar-end">
+      {%- if usr.is_none() %}
+      <div class="navbar-item">
+        <div class="buttons">
+          <a class="button is-primary" href="/signup">
+            <span class="icon">
+              <i class="zg-icon zg-user"></i>
+            </span>
+            <span>Sign up</span>
+          </a>
+          <a class="button is-light" href="/login">
+            <span class="icon">
+              <i class="zg-icon zg-sign-in"></i>
+            </span>
+            <span>Log in</span>
+          </a>
+        </div>
+      </div>
+      {%- else %}
+      <div id="navbar-create-dropdown" class="navbar-item has-dropdown">
+        <a id="navbar-create-dropdown-trigger" class="navbar-link has-zg-icon">
+          <span class="icon is-small"><i class="zg-icon zg-plus" aria-hidden="true"></i></span>
+        </a>
+        <div class="navbar-dropdown is-right">
+          <a class="navbar-item has-zg-icon" href="/project/new">
+            <span class="icon is-small"><i class="zg-icon zg-plus" aria-hidden="true"></i></span>
+            <span>New Repository</span>
+          </a>
+          <a class="navbar-item has-zg-icon">
+            <span class="icon is-small"><i class="zg-icon zg-git-migrate" aria-hidden="true"></i></span>
+            <span>New Migration</span>
+          </a>
+          <a class="navbar-item has-zg-icon">
+            <span class="icon is-small"><i class="zg-icon zg-users" aria-hidden="true"></i></span>
+            <span>New Organisation</span>
+          </a>
+        </div>
+      </div>
+
+      <div id="navbar-user-dropdown" class="navbar-item has-dropdown">
+        <a id="navbar-user-dropdown-trigger" class="navbar-link">
+          <span class="image is-24x24">
+            <img class="is-square-rounded" src="{{ usr.unwrap().avatar.to_str().unwrap() }}" />
+          </span>
+        </a>
+        <div class="navbar-dropdown is-right">
+          <div class="navbar-item">
+            Logged in as&nbsp;<strong>{{ usr.unwrap().username }}</strong>
+          </div>
+          <hr class="navbar-divider">
+          <a class="navbar-item has-zg-icon" href="{{ usr.unwrap().url_relative() }}">
+            <span class="icon is-small"><i class="zg-icon zg-user" aria-hidden="true"></i></span>
+            <span>Profile</span>
+          </a>
+          <a class="navbar-item has-zg-icon" href="/user/settings/profile">
+            <span class="icon is-small"><i class="zg-icon zg-settings" aria-hidden="true"></i></span>
+            <span>Settings</span>
+          </a>
+          <a class="navbar-item has-zg-icon">
+            <span class="icon is-small"><i class="zg-icon zg-question" aria-hidden="true"></i></span>
+            <span>Help</span>
+          </a>
+          <hr class="navbar-divider">
+          <div class="navbar-item has-text-grey-light">
+            Zorgit {{ env!("CARGO_PKG_VERSION") }}
+          </div>
+          {%- if usr.as_ref().unwrap().is_admin %}
+          <a class="navbar-item has-zg-icon" href="/admin">
+            <span class="icon is-small"><i class="zg-icon zg-bolt" aria-hidden="true"></i></span>
+            <span>Administration</span>
+          </a>
+          {%- endif %}
+          <a class="navbar-item has-zg-icon" href="/logout">
+            <span class="icon is-small"><i class="zg-icon zg-sign-out" aria-hidden="true"></i></span>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+      {%- endif %}
+    </div>
+  </div>
+</nav>

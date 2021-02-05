@@ -1,0 +1,40 @@
+debug = true
+secret_key = "8nx0mg8QMRAfDlhfvUwQPpn5YGlsIMrO2kwyvqQ6U+U="
+session_key = "sid"
+session_duration = 7
+data_path = "data"
+
+[server]
+cert_file = "example_cert.pem"
+key_file = "example_key.pem"
+
+[server.address]
+scheme = "http"
+host = "localhost"
+port = "2020"
+
+[attachments]
+path = "attachments"
+
+[attachments.avatars]
+path = "avatars"
+
+[projects]
+path = "~/zorgit-projects"
+
+[projects.pull_requests]
+work_in_progress_prefixes = ["WIP:","[WIP]:"]
+
+[databases] # maybe split this even further in [databases.sqlite], [databases.pg], and so on.
+sqlite_zorgit = { url = "db/zorgit.sqlite" }
+
+[mailer]
+service = "Integrated"
+with_helo = false
+#helo_hostname = "Option<String>"
+#smtp_server = "Option<Url>"
+#smtp_login = "Option<String>"
+#smtp_password = "Option<String>"
+from = "info@example.com"
+subject_prefix = "[Zorgit]"
+#sendmail_path = "PATH"

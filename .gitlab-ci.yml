@@ -1,0 +1,28 @@
+stages:
+  - build
+  - test
+
+variables:
+  CARGO_HOME: "$CI_PROJECT_DIR/cargo"
+
+build:rust-nightly:
+  stage: build
+  image: rustlang/rust:nightly
+  script:
+    - cargo build --verbose --color=always --workspace
+  cache:
+    paths:
+      - target/
+      - cargo/
+
+test:rust-nightly:
+  stage: test
+  image: rustlang/rust:nightly
+  dependencies:
+        - build:rust-nightly
+  script:
+    - cargo test --verbose --color=always --workspace --tests -- --nocapture
+  cache:
+    paths:
+      - target/
+      - cargo/

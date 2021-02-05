@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content -%}
+<section class="hero is-fullheight-with-navbar is-dark">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <div class="column is-4 is-offset-4">
+        <h3 class="title">Login</h3>
+        <p class="subtitle">Please login to proceed.</p>
+        <div class="login-box">
+          <figure class="avatar">
+            {% if user.as_ref().is_some() -%}
+            <img src="{{ user.as_ref().unwrap().avatar.to_str().unwrap() }}" />
+            {% else -%}
+            <img src="https://bulma.io/images/placeholders/128x128.png" />
+            {% endif -%}
+          </figure>
+          <form action="/login{% if return_to.is_some() %}?return_to={{ return_to.as_ref().unwrap() }}{% endif %}" method="post">
+            <div class="field">
+              <div class="control has-icons-left">
+                <input class="input is-large" autofocus="" name="username" type="text" placeholder="Your Username or Email" required>
+                <span class="icon is-small is-left">
+                  <i class="zg-icon zg-user"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control has-icons-left">
+                <input class="input is-large" name="password" type="password" placeholder="Your Password" {# pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" #} required>
+                <span class="icon is-small is-left">
+                  <i class="zg-icon zg-lock"></i>
+                </span>
+              </div>
+              {% if !message.is_empty() -%}
+              {# <p class="help is-success">This username is available</p> #}
+              <p class="tag is-danger">{{ message }}</p>
+              {% endif -%}
+            </div>
+            <div class="field">
+              <label class="checkbox">
+                <input name="remember" type="checkbox">
+                Remember me
+              </label>
+            </div>
+            <input type="submit" class="button is-block is-info is-large is-fullwidth" value="Login">
+          </form>
+        </div>
+        <p class="has-text-grey">
+          <a class="has-text-grey" href="/signup">Sign Up</a> &nbsp;•&nbsp;
+          <a class="has-text-grey" href="../">Forgot Password</a> &nbsp;•&nbsp;
+          <a class="has-text-grey" href="../">Need Help?</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock -%}
+
+{# Maybe use one of the wallpapers from the following sources as background.
+- https://blog.hdwallsource.com/32-awesome-hd-cave-wallpapers/
+- https://wall.alphacoders.com/big.php?i=274947 as background.
+Because they are nice and the name Zorgit is about minerals/rocks. #}

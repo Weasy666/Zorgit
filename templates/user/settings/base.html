@@ -1,0 +1,42 @@
+{% extends "../../base/base.html" %}
+
+{% block content %}
+<div class="container is-flex">
+<!-- Side menu -->
+  <div class="menu side">
+    <nav class="panel boxed">
+      <p class="panel-heading">
+        Personal settings
+      </p>
+      <div class="panel-block">
+        <span class="control has-icons-left">
+        <fieldset disabled>
+          <input class="input is-small" type="text" placeholder="Filter settings...">
+          <span class="icon is-small is-left">
+            <i class="zg-icon zg-search" aria-hidden="true"></i>
+          </span>
+        </fieldset disabled>
+        </span>
+      </div>
+      <a class="panel-block {% if active_tab == Tab::Profile -%}is-active{% endif -%}" href="/user/settings/profile">
+        <span>Profile</span>
+      </a>
+      <a class="panel-block {% if active_tab == Tab::Account -%}is-active{% endif -%}" href="/user/settings/account">
+        <span>Account</span>
+      </a>
+      <a class="panel-block {% if active_tab == Tab::Preferences -%}is-active{% endif -%}" href="/user/settings/preferences">
+        <span>Preferences</span>
+      </a>
+      <a class="panel-block {% if active_tab == Tab::Projects -%}is-active{% endif -%}" href="/user/settings/projects">
+        <span>Projects</span>
+        <span class="badge">0</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Menu pages -->
+  <div class="menu content">
+  {% block settings_page %}Settings pages{% endblock %}
+  </div>
+</div>
+{%- endblock %}

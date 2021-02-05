@@ -1,0 +1,234 @@
+{% block title -%}Project • {{ project.owner.username }}/{{ project.name }} Settings • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "base.html" %}
+
+{% block settings_page -%}
+<section>
+  <h2 class="title">Basic Settings</h2>
+  <hr/>
+  <form id="project_basic_settings" class="" action="{{ project.url_relative() }}/settings" method="post">
+    <input name="_method" value="put" type="hidden">
+    <input name="id" value="{{ project.id }}" type="hidden">
+    <div>
+      <div class="field">
+        <label class="label">Project Name</label>
+        <div class="control has-icons-left" style="width: 100%;">
+          <input class="input" name="project_name" value="{{ project.name }}" placeholder="The projects name" type="text" autocomplete="off" required>
+          <span class="icon is-small is-left">
+            <i class="zg-icon zg-code"></i>
+          </span>
+        </div>
+        <div class="control has-icons-left">
+          <span>Project size:</span> <span>{{ project.disk_size.humanize() }}</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Visibility</label>
+        <div class="control">
+          <input name="is_private" value="{{ project.is_private }}" type="hidden">
+          <div id="visibility-dropdown" class="dropdown">
+            <a id="visibility-dropdown-trigger" class="button">
+              <span class="icon">
+                <i class="zg-icon {% if project.is_private %}zg-lock{% else %}zg-book{% endif %}" aria-hidden="true"></i>
+              </span>
+              <span>{% if project.is_private %}Private{% else %}Public{% endif %}</span>
+              <span class="icon is-small">
+                <i class="zg-icon zg-triangle-down" aria-hidden="true"></i>
+              </span>
+            </a>
+            <div id="visibility-dropdown-menu" class="dropdown-menu" role="menu">
+              <div class="dropdown-content is-paddingless">
+                <nav class="panel">
+                  <a name="v_private" data-value="true" class="panel-block {% if project.is_private %}is-active{% endif %}">
+                    <span class="panel-icon {% if !project.is_private %}is-invisible{% endif %}">
+                      <i class="zg-icon zg-check" aria-hidden="true"></i>
+                    </span>
+                    <span class="panel-icon">
+                      <i class="zg-icon zg-lock" aria-hidden="true"></i>
+                    </span>
+                    <span>Private</span>
+                  </a>
+                  <a name="v_public" data-value="false" class="panel-block {% if !project.is_private %}is-active{% endif %}">
+                    <span class="panel-icon {% if project.is_private %}is-invisible{% endif %}">
+                      <i class="zg-icon zg-check" aria-hidden="true"></i>
+                    </span>
+                    <span class="panel-icon">
+                      <i class="zg-icon zg-book" aria-hidden="true"></i>
+                    </span>
+                    <span>Public</span>
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Description</label>
+        <div class="control">
+          <textarea class="textarea" name="description" value="{% if project.description.is_some() %}{{ project.description.as_ref().unwrap() }}{% endif %}" placeholder="Here you can write something about the project" ></textarea>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Website</label>
+        <div class="control has-icons-left">
+          <input class="input" name="website" value="{% if project.website.is_some() %}{{ project.website.as_ref().unwrap() }}{% endif %}" placeholder="Address of the projects website" type="url">
+          <span class="icon is-small is-left">
+            <i class="zg-icon zg-world"></i>
+          </span>
+        </div>
+      </div>
+
+      <div id="topics-field" class="field">
+        <label class="label">Topics</label>
+        <div class="control">
+          <input id="topic-ids" name="topic_ids" value="{%- if project.topics.is_some() -%}
+            {%- for t in project.topics.as_ref().unwrap() -%}
+              {%- if loop.last -%}
+                {{- t.id -}}
+              {%- else -%}
+                {{- t.id -}},
+              {%- endif -%}
+            {%- endfor -%}
+            {%- endif -%}" type="hidden">
+          <div id="topics-tags-box" class="labels-box">
+            {%- if project.topics.is_some() -%}
+            {%- for topic in project.topics.as_ref().unwrap() -%}
+            <span name="t_{{ topic.id }}" data-value="{{ topic.id }}" class="tag" >{{ topic.name }}<a class="delete is-small"></a></span>
+            {%- endfor -%}
+            {%- endif -%}
+          </div>
+          <span class="control has-icons-left">
+            <input id="topics-search" class="input" type="text" placeholder="Filter settings..." autocomplete="off">
+            <span class="icon is-left">
+              <i class="zg-icon zg-search" aria-hidden="true"></i>
+            </span>
+          </span>
+          <span class="control">
+            <div id="topics-search-autocomplete" class="dropdown-menu">
+              <div class="dropdown-content">
+                <span class="dropdown-item">Searching...</span>
+              </div>
+            </div>
+          </span>
+        </div>
+      </div>
+
+      {# Make Template #}
+
+      <div>
+        <input class="button is-primary" type="submit" value="Save changes">
+      </div>
+    </div>
+  </form>
+</section>
+
+{# ----------- #}
+{# Danger Zone #}
+{# ----------- #}
+<section id="danger-zone" class="message is-danger">
+  <div class="message-header">
+    <h2 class="title">🚨 Danger Zone 🚨</h2>
+  </div>
+  {# Transfer Ownership #}
+  <div class="message-body">
+    <label class="label">Transfer Ownership</label>
+    <div class="field is-horizontal">
+      <div class="control">
+        <span>Transfer this project to another user or to an organization where you have the ability to create projects.</span>
+      </div>
+      <div class="control">
+        <button id="modal-show-transfer" class="button is-danger" data-target="modal-transfer">Begin Transfer</button>
+      </div>
+    </div>
+    <div id="modal-transfer" class="modal is-danger">
+      <form id="project-transfer" class="" action="{{ project.url_relative() }}/settings/transfer" method="post">
+        <input name="project_name" value="{{ project.name }}" type="hidden">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Transfer Ownership</p>
+            <button id="modal-close-h-transfer" class="delete" type="reset" aria-label="close" data-target="modal-transfer"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="field">
+              <span>Transfering can be seen as a destuctive action.</span>
+              <label class="label">New Owner - can be a User or Organization</label>
+              <div class="control has-icons-left">
+                <input class="input" name="new_owner" value="" placeholder="Name of the new owner" type="text" required>
+                <span class="icon is-small is-left">
+                  <i class="zg-icon zg-users"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <span>Confirm transfer by entering this projects name. Be aware that this decision cannot be undone. Unless you are part of the new organization or the new owner transfers the project back to you.</span>
+              <label class="label">Enter this projects name to confirm: <span>{{ project.name }}</span></label>
+              <div class="control has-icons-left">
+                <input class="input" name="confirm_name" value="" placeholder="Name of this project" type="text" required>
+                <span class="icon is-small is-left">
+                  <i class="zg-icon zg-code"></i>
+                </span>
+              </div>
+            </div>
+          </section>
+          <footer class="modal-card-foot is-pulled-right">
+            <button id="modal-close-f-transfer" class="button" type="reset" data-target="modal-transfer">Cancel</button>
+            <button id="modal-submit-transfer" class="button is-danger" type="submit" disabled>Transfer Ownership</button>
+          </footer>
+        </div>
+      </form>
+    </div>
+  </div>
+  {# Delete Wiki #}
+
+  {# Delete Project #}
+  <div class="message-body">
+    <label class="label">Delete this Project</label>
+    <div class="field is-horizontal">
+      <div class="control">
+        <span>Deleting a project cannot be undone. This action will delete all data of this project and is irreversible!</span>
+      </div>
+      <div class="control">
+        <button id="modal-show-delete" class="button is-danger" data-target="modal-delete">Delete this Project</button>
+      </div>
+    </div>
+    <div id="modal-delete" class="modal is-danger">
+      <form id="project-delete" class="" action="{{ project.url_relative() }}/settings" method="post">
+        <input name="_method" value="delete" type="hidden">
+        <input name="id" value="{{ project.id }}" type="hidden">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Delete this Project</p>
+            <button id="modal-close-h-delete" class="delete" type="reset" aria-label="close" data-target="modal-delete"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="field">
+              <span>Confirm deletion by entering this projects name. Again, be aware that this decision cannot be undone and all data is lost.</span>
+              <label class="label">Enter this projects name to confirm: <span>{{ project.owner.username }}/{{ project.name }}</span></label>
+              <div class="control has-icons-left">
+                <input class="input" name="confirm_name" value="" placeholder="Name of this project" type="text" required>
+                <input name="project_name" value="{{ project.owner.username }}/{{ project.name }}" type="hidden">
+                <span class="icon is-small is-left">
+                  <i class="zg-icon zg-code"></i>
+                </span>
+              </div>
+            </div>
+          </section>
+          <footer class="modal-card-foot is-pulled-right">
+            <button id="modal-close-f-delete" class="button" type="reset" data-target="modal-delete">Cancel</button>
+            <button id="modal-submit-delete" class="button is-danger" type="submit" disabled>
+              <span class="icon">
+                <i class="zg-icon zg-trash" aria-hidden="true"></i>
+              </span>
+              <span>Irreversibly delete this Project</span>
+            </button>
+          </footer>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock -%}

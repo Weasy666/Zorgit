@@ -1,0 +1,89 @@
+{% block title -%}Profile • Settings • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "base.html" %}
+
+{% block settings_page %}
+<h2 class="title">Public profile</h2>
+<hr/>
+{% let usr = user.as_ref().unwrap() %}
+<form class="is-flex" action="/user/settings/profile" method="post">
+  <input name="_method" value="patch" type="hidden">
+  <input name="id" value="{{ usr.id }}" type="hidden">
+  <div>
+    <div class="field">
+      <label class="label">Full Name</label>
+      <div class="control has-icons-left">
+        <input class="input" name="full_name" value="{% if usr.full_name.is_some() %}{{ usr.full_name.as_ref().unwrap() }}{% endif %}" placeholder="Your full name" type="text" size="250">
+        <span class="icon is-small is-left">
+          <i class="zg-icon zg-user"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Email Address</label>
+      <div class="control has-icons-left">
+        <input class="input" name="email" value="{{ usr.email }}" placeholder="Your primary email" type="email" required>
+        <span class="icon is-small is-left">
+          <i class="zg-icon zg-mail"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="checkbox">
+        <input name="show_email" type="checkbox" {% if usr.is_email_hidden %}value="on"{% else %}value="off" checked{% endif %}>
+        Show Email Address
+      </label>
+    </div>
+    <div class="field">
+      <label class="label">Description</label>
+      <div class="control">
+        <textarea class="textarea" value="{% if usr.description.is_some() %}{{ usr.description.as_ref().unwrap() }}{% endif %}" name="description" placeholder="Here you can write something about yourself" ></textarea>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Website</label>
+      <div class="control has-icons-left">
+        <input class="input" name="website" value="{% if usr.website.is_some() %}{{ usr.website.as_ref().unwrap() }}{% endif %}" placeholder="Address of your website" type="url">
+        <span class="icon is-small is-left">
+          <i class="zg-icon zg-world"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Location</label>
+      <div class="control has-icons-left">
+        <input class="input" name="location" value="{% if usr.location.is_some() %}{{ usr.location.as_ref().unwrap() }}{% endif %}" placeholder="Your location" type="text">
+        <span class="icon is-small is-left">
+          <i class="zg-icon zg-location"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Language</label>
+      <div class="control has-icons-left">
+        <span class="select">
+          <select name="language">
+          {% for lang in models::LANGUAGES %} {# TODO: when trying to use this with crate::models::Language::iter() (when the iter funtion existed) the template parsing will fail #}
+            <option value="{{ lang }}" {% if lang == usr.language.borrow() %}selected{% endif %}>{{ lang }}</option>
+          {% endfor %}
+          </select>
+        </span>
+        <span class="icon is-tiny is-left">
+          <i class="zg-icon zg-language"></i>
+        </span>
+      </div>
+    </div>
+    <div>
+      <input class="button is-primary is-pulled-right" type="submit" value="Save Changes">
+    </div>
+  </div>
+  <div class="">
+    <div class="field">
+      <input name="avatar" value="{{ user.as_ref().unwrap().avatar.to_str().unwrap() }}" type="hidden">
+      <label class="label">Profile image</label>
+      <div class="control avatar">
+        <img src="{{ user.as_ref().unwrap().avatar.to_str().unwrap() }}" />
+      </div>
+    </div>
+  </div>
+</form>
+{%- endblock %}

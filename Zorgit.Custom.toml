@@ -1,0 +1,8 @@
+[mailer]
+service = "SMTP"
+with_helo = false
+#helo_hostname = "Option<String>"
+from = "zorgit@example.com"
+smtp_server = "smtp.example.com:587"
+smtp_login = "zorgit@example.com"
+smtp_password = "secret_password"

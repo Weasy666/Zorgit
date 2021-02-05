@@ -1,0 +1,104 @@
+{% block title -%}Issue #{{ issue.number }} • {{ issue.title }} • {{ project.name }} • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "../base.html" %}
+
+{% block tab_content -%}
+<div class="issue-header-wrapper">
+  <div id="issue-header" class="issue-header">
+    <h1 id="issue-title">
+      <span class="index">#{{ issue.number }}</span>
+      <span class="title">{{ issue.title }}</span>
+    </h1>
+    <div id="issue-subheader" class="subheader">
+      {% if issue.is_closed -%}
+      <span class="tag is-danger">
+        <span class="icon is-small"><i class="zg-icon zg-ban" aria-hidden="true"></i></span>
+        <span>Closed</span>
+      </span>
+      {% else -%}
+      <span class="tag is-success">
+        <span class="icon is-small"><i class="zg-icon zg-warning" aria-hidden="true"></i></span>
+        <span>Open</span>
+      </span>
+      {% endif -%}
+      <span>
+        <a class="user" href="{{ issue.user.url_relative() }}">{{ issue.user.username }}</a> opened this issue <span class="tooltip is-tooltip-bottom" data-tooltip="{{ issue.created_at.rfc3339() }}">{{ issue.created_at.humanize() }}</span>
+        {%- if issue.comments.is_some() %} · {{ issue.comments.as_ref().unwrap().len() }} comments{% endif -%}
+      </span>
+    </div>
+  </div>
+<hr/>
+</div>
+<div id="issue-container" class="issue-container">
+  <div id="issue-timeline" class="issue-timeline">
+    <div class="comment">
+      <div class="avatar">
+        <a href="{{ issue.user.url_relative() }}">
+          <img class="is-square-rounded" src="{{ issue.user.avatar.to_str().unwrap() }}" />
+        </a>
+      </div>
+      <div class="boxed">
+        <h4 class="header"><a href="{{ issue.user.url_relative() }}">{{ issue.user.username }}</a> commented on <span class="tooltip is-tooltip-top" data-tooltip="{{ issue.created_at.rfc3339() }}">{{ issue.created_at.humanize() }}</span></h4>
+        <div>{{ issue.rendered_content(project.url_relative().borrow())|safe }}</div>
+      </div>
+    </div>
+
+    {% if issue.comments.is_some() -%}
+    {% for comment in issue.comments.as_ref().unwrap() -%}
+    {% include "comment.html" -%}
+    {% endfor -%}
+    {% endif -%}
+
+    {% if user.is_some() -%}
+    <form id="new-comment-form" action="{{ project.url_relative() }}/issues/{{ issue.number }}/comments" method="post">
+      <input name="user_id" value="{{ user.as_ref().unwrap().id }}" type="hidden">
+      <div id="new-comment-container" class="new-comment-container">
+        <div>
+          <a class="avatar" href="{{ user.as_ref().unwrap().url_relative() }}">
+            <img class="is-square-rounded" src="{{ user.as_ref().unwrap().avatar.to_str().unwrap() }}" />
+          </a>
+        </div>
+        <div id="new-comment-box" class="new-comment-box">
+          <div class="tabs-container">
+            <div class="tabs">
+              <ul class="">
+                <li id="tab-write" class="is-active" data-tab-content="tab-content-write">
+                  <a>
+                    <span class="icon is-small"><i class="zg-icon zg-file-edit" aria-hidden="true"></i></span>
+                    <span>Write</span>
+                  </a>
+                </li>
+                <li id="tab-preview" class=""  data-tab-content="tab-content-preview">
+                  <a>
+                    <span class="icon is-small"><i class="zg-icon zg-eye" aria-hidden="true"></i></span>
+                    <span>Preview</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div id="tab-content-write">
+              <textarea name="content" id="content" class="textarea"></textarea>
+            </div>
+            <div id="tab-content-preview" class="markdown is-hidden">
+              Loading...
+            </div>
+          </div>
+          <div>
+            <input class="button is-primary is-pulled-right" type="submit" value="Comment">
+          </div>
+        </div>
+      </div>
+    </form>
+    {% endif -%}
+  </div>
+  <div id="issue-metas-box" class="issue-metas-box">
+    <form id="update-issue-form" action="{{ project.url_relative() }}/issues/{{ issue.number }}" method="post">
+      <input name="user_id" value="{% if user.is_some() -%}{{ user.as_ref().unwrap().id }}{% endif -%}" type="hidden">
+      <input name="title" value="{{ issue.title }}" type="hidden">
+      <input name="content" value="{{ issue.content }}" type="hidden">
+      {% include "metas.html" -%}
+    </form>
+  </div>
+</div>
+{% endblock -%}

@@ -1,0 +1,21 @@
+{
+    "version": "3.7.0",
+    "compileOnSave": true,
+    "compilerOptions": {
+        "strict": true,
+        "noUnusedLocals": true,
+        "incremental": true,
+        "noFallthroughCasesInSwitch": true,
+        "target": "es5",
+        "module": "ES6",
+        "lib": ["dom", "es2015", "es2016", "esnext"],
+        "allowJs": true,
+        "outDir": "static/js"
+    },
+    "include": [
+        "src/scripts/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

@@ -1,0 +1,124 @@
+{% block title -%}{{ commit.title().as_ref().unwrap() }} • {{ commit.short_id() }} • {{ project.owner.username }}/{{ project.name }} • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "project/base.html" %}
+
+{% block tab_content -%}
+<div class="commit boxed">
+  <h4 class="header">
+    <div class="columns">
+      <div class="column">
+        <div class="has-text-weight-semibold padding-bottom-0-5">{{ commit.title().as_ref().unwrap() }}</div>
+        <a class="is-small" href='{{ project.url_relative() }}{% if branch.is_some() && branch.as_ref().unwrap() != "master" -%}/branches/{{ branch.as_ref().unwrap() }}{% endif -%}'>
+          <span class="icon is-small" style="vertical-align: middle;"><i class="zg-icon zg-git-branch" aria-hidden="true"></i></span>
+          <span class="is-size-6">{{ branch.as_ref().unwrap_or("N/A".to_string().borrow()) }}</span>
+        </a>
+        {% if commit.description().is_some() -%}
+        <div class="description">
+          <hr/>
+          {{ commit.description().as_ref().unwrap() }}
+        </div>
+        {% endif -%}
+      </div>
+
+      <div class="column is-narrow">
+        <a class="button is-primary is-outlined">Browse Source</a>
+      </div>
+    </div>
+  </h4>
+
+  <div class="diff-commit-info">
+    <div class="user">
+      {% let author -%}
+      {% if commit.author().is_some() -%}
+      {% let author = commit.author().unwrap() -%}
+      <a href="{{ author.url_relative() }}">
+        <span class="image is-24x24">
+          <img class="is-square-rounded" src="{{ author.avatar.to_str().unwrap() }}" />
+        </span>
+      </a>
+      <span>
+        <a class="has-weight-semi-bold" href="{{ author.url_relative() }}">{{ author.username }}</a>
+        committed at
+        <span class="tooltip is-tooltip-bottom" data-tooltip="{{ commit.time().rfc3339() }}">
+          {{ commit.time().humanize() }}
+        </span>
+      </span>
+      {% endif -%}
+    </div>
+    <div class="commits">
+      <div>
+        <span>parent:</span>
+        {% if commit.parents_id().is_some() -%}
+        {% for parent_id in commit.parents_id().as_ref().unwrap() -%}
+        {% if loop.last -%}
+        <a class="tag is-primary sha" href="{{ project.url_relative() }}/commits/{{ parent_id }}">
+          {{ parent_id.get(0..=7).unwrap() }}
+        </a>
+        {% else -%}
+        <a class="tag is-primary sha" href="{{ project.url_relative() }}/commits/{{ parent_id }}">
+          {{ parent_id.get(0..=7).unwrap() }}
+        </a>
+        +
+        {% endif -%}
+        {% endfor -%}
+        {% else -%}
+        <a class="tag is-primary sha">
+          None
+        </a>
+        {% endif -%}
+      </div>
+      <div>
+        <span>commit:</span>
+        <span class="tag is-primary sha">
+          {{ commit.id() }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="diff-details-box">
+  <span class="icon is-small"><i class="zg-icon zg-file-edit" aria-hidden="true"></i></span>
+  <strong> {{ diff.files_changed }} changed files</strong> with <strong>{{ diff.insertions }} additions</strong> and <strong>{{ diff.deletions }} deletions</strong>
+</div>
+{% for file in diff.files -%}
+<div class="file-box boxed">
+  <h4 class="diff-header">
+    <div class="file-diff-counter">
+      <span>+ {{ file.addition }}</span>
+        {% match file -%}
+        {%- when DiffFile::Add with (_) -%}
+        <progress class="count-bar" value="{% if file.addition == 0 %}1{% else %}{{ file.addition }}{% endif %}" max="{{ file.addition + file.deletion }}">{{ file.calc_bar_width() }}%</progress>
+        {%- else -%}
+        <progress class="count-bar" value="{{ file.addition }}" max="{{ file.addition + file.deletion }}">{{ file.calc_bar_width() }}%</progress>
+        {%- endmatch %}
+      <span>- {{ file.deletion }}</span>
+    </div>
+    <span>{{ file.get_title() }}</span>
+  </h4>
+
+  <div>
+    <table class="diff">
+      <tbody>
+        {% for hunk in file.hunks_highlighted() -%}
+          <tr class="{{ hunk.header.css_class() }}">
+            <td class="line-num" data-line-num="{{ hunk.header.old_num() }}"></td>
+            <td class="line-num" data-line-num="{{ hunk.header.new_num() }}"></td>
+            <td class="line-marker">{{ hunk.header.marker }}</td>
+            <td class="line-code">{{ hunk.header.content_as_string() }}</td>
+          </tr>
+          {% for line in hunk.lines -%}
+          <tr class="{{ line.css_class() }}">
+            <td class="line-num" data-line-num="{{ line.old_num() }}"></td>
+            <td class="line-num" data-line-num="{{ line.new_num() }}"></td>
+            <td class="line-marker">{{ line.marker }}</td>
+            <td class="line-code">{{ line.content_as_string()|safe}}</td>
+          </tr>
+          {% endfor -%}
+        {% endfor -%}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endfor -%}
+
+{% endblock -%}

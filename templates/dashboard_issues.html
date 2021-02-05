@@ -1,0 +1,80 @@
+{% block title -%}Issues • Dashboard • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="content">
+    <div class="issues-top-bar">
+      <div class="search-bar is-pulled-left">
+        <input class="input" type="text" placeholder="Search all issues">
+        <span class="icon is-small is-left">
+          <i class="zg-icon zg-search"></i>
+        </span>
+      </div>
+      <div class="buttons has-addons is-pulled-left">
+        <a class="button is-primary" href="">
+          <span>Created</span>
+        </a>
+        <a class="button" href="">
+          <span>Assigned</span>
+        </a>
+        <a class="button" href="">
+          <span>Mentioned</span>
+        </a>
+      </div>
+    </div>
+
+    <div id="issues-box" class="issues-box boxed">
+      <h4 class="project-header">
+        <a href="issues">
+          <span class="icon is-small"><i class="zg-icon zg-warning" aria-hidden="true"></i></span>
+          <span>{{ num_issues_open }} Open</span>
+        </a>
+        <a href="issues">
+          <span class="icon is-small"><i class="zg-icon zg-check" aria-hidden="true"></i></span>
+          <span>{{ num_issues_closed }} Closed</span>
+        </a>
+      </h4>
+
+      {% for issue in issues -%}
+      {% let project = projects.get(issue.project_id.borrow()).unwrap() %}
+      <article class="issue">
+        <div class="issue-header">
+          <a href="{{ project.url_relative() }}/issues/{{ issue.number }}">{{ issue.title }}</a>
+          <span class="issue-header-right">
+            {% if issue.comments.is_some() -%}
+            <a href="{{ project.url_relative() }}/issues/{{ issue.number }}">
+              <span class="icon is-small"><i class="zg-icon zg-comments"></i></span>
+              <span>{{ issue.comments.as_ref().unwrap().len() }}</span>
+            </a>
+            {% endif -%}
+            <a class="toggle">
+              <span class="icon"><i class="zg-icon zg-triangle-down"></i></span>
+            </a>
+          </span>
+        </div>
+        <div class="issue-body is-hidden">
+          <div class="line-clamp-3">
+            {{ issue.rendered_content(project.url_relative().borrow())|safe }}
+          </div>
+        </div>
+        <div class="issue-footer">
+          <a href="{{ project.url_relative() }}">{{ project.owner.username }}/{{ project.name }}</a>
+          <span class="tag">#{{ issue.number }}</span>
+          <span>
+            opened <span class="tooltip is-tooltip-bottom" data-tooltip="{{ issue.created_at.rfc3339() }}">{{ issue.created_at.humanize() }}</span> by <a href="{{ issue.user.url_relative() }}">{{ issue.user.username }}</a>
+          </span>
+          <span class="labels-box">
+            {% if issue.labels.is_some() -%}
+            {% for label in issue.labels.as_ref().unwrap() -%}
+            <a class="tag" style="background-color: {{ label.color }};">{{ label.name }}</a>
+            {% endfor -%}
+            {% endif -%}
+          </span>
+        </div>
+      </article>
+      {% endfor -%}
+    </div>
+  </div>
+</div>
+{%- endblock %}

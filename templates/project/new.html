@@ -1,0 +1,232 @@
+{% extends "../base/base.html" %}
+{% block content %}
+<div class="container">
+  <div class="content">
+    <form id="new-project-form" class="new-project-form" action="/project/new" method="post">
+      <h2>Create a New Project</h1>
+      <p>A project contains all source files, including the revision history. Already have a project elsewhere?</p>
+      <hr/>
+      <div class="owner-projectname">
+        <div class="field">
+          <label class="label">Owner</label>
+          <div class="control">
+            <input name="owner_id" value="{{ owners.first().unwrap().id }}" type="hidden">
+            <div id="owner-dropdown" class="dropdown">
+              <a id="owner-dropdown-trigger" class="button">
+                <span class="image is-24x24">
+                  <img class="is-square-rounded" src="{{ owners.first().unwrap().avatar.to_str().unwrap() }}" />
+                </span>
+                {{ owners.first().unwrap().username }}
+                <span class="icon is-small">
+                  <i class="zg-icon zg-triangle-down" aria-hidden="true"></i>
+                </span>
+              </a>
+              <div id="owner-dropdown-menu" class="dropdown-menu" role="menu">
+                <div class="dropdown-content is-paddingless">
+                  <nav class="panel">
+                    {% for owner in owners -%}
+                    <a name="o_{{owner.id}}" class="panel-block {% if loop.first %}is-active{% endif %}">
+                      <span class="panel-icon {% if !loop.first %}is-invisible{% endif %}">
+                        <i class="zg-icon zg-check" aria-hidden="true"></i>
+                      </span>
+                      <span class="image is-24x24">
+                        <img class="is-square-rounded" src="{{ owner.avatar.to_str().unwrap() }}" />
+                      </span>
+                      {{ owner.username }}
+                    </a>
+                    {% endfor -%}
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="slash">/</span>
+        <div class="field">
+          <label class="label">Project name</label>
+          <div class="control">
+            <input class="input" name="name" value="" placeholder="" type="text" maxlength="100" size="100" autocomplete="off" required>
+          </div>
+        </div>
+      </div>
+      <p>Great project names are short and memorable.</p>
+      <div class="field">
+        <label class="label">Description <span class="is-size-7">(optional)<span></label>
+        <div class="control">
+          <input class="input" name="description" value="" placeholder="" type="text" autocomplete="off">
+        </div>
+      </div>
+
+      <hr/>
+
+      <div class="field">
+        <div class="control">
+          <label class="radio has-icon">
+            <input name="is_private" type="radio" value="off" checked>
+            <span class="icon"><i class="zg-icon zg-book" aria-hidden="true"></i></span>
+            <div>
+              <span class="header">Public</span>
+              <span class="subheader">Anyone can see this project. You choose who can commit.</span>
+            </div>
+          </label>
+          <label class="radio has-icon">
+            <input name="is_private" type="radio" value="on">
+            <span class="icon"><i class="zg-icon zg-lock" aria-hidden="true"></i></span>
+            <div>
+              <span class="header">Private</span>
+              <span class="subheader">You choose who can see and commit to this project.</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <hr/>
+
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input name="init" type="hidden" value="off">
+            <input name="init" type="checkbox" value="on">
+            <div>
+              <span class="header">Initialize this project</span>
+              <span class="subheader">This will let you immediately clone the project to your computer. Skip this step if you’re importing an existing project.</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="is-flex is-grouped">
+
+        <div class="field">
+          <label class="label">Version Control</label>
+          <div class="control">
+            <input name="vcs" value="0" type="hidden">
+            <div id="vcs-dropdown" class="dropdown">
+              <a id="vcs-dropdown-trigger" class="button">
+                <span class="logo">
+                  <img src="/static/img/git.svg" aria-hidden="true"/>
+                </span>
+                <span class="icon is-small">
+                  <i class="zg-icon zg-triangle-down" aria-hidden="true"></i>
+                </span>
+              </a>
+              <div id="vcs-dropdown-menu" class="dropdown-menu" role="menu">
+                <div class="dropdown-content is-paddingless">
+                  <nav class="panel">
+                    <a name="v_0" class="panel-block is-active">
+                      <span class="panel-icon">
+                        <i class="zg-icon zg-check" aria-hidden="true"></i>
+                      </span>
+                      <span class="logo">
+                        <img src="/static/img/git.svg" aria-hidden="true"/>
+                      </span>
+                    </a>
+                    {# Not implemented yet #}
+                    {# <a name="v_1" class="panel-block">
+                      <span class="panel-icon is-invisible">
+                        <i class="zg-icon zg-check" aria-hidden="true"></i>
+                      </span>
+                      <span class="logo">
+                        <img src="/static/img/mercurial.svg" aria-hidden="true"/>
+                      </span>
+                    </a> #}
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">README</label>
+          <div class="control">
+            <input name="readme" value="" type="hidden">
+            <div id="readme-dropdown" class="dropdown">
+              <a id="readme-dropdown-trigger" class="button">
+                <span>Default</span>
+                <span class="icon is-small">
+                  <i class="zg-icon zg-triangle-down" aria-hidden="true"></i>
+                </span>
+              </a>
+              <div id="readme-dropdown-menu" class="dropdown-menu" role="menu">
+                <div class="dropdown-content is-paddingless">
+                  <nav class="panel">
+                    <a name="r_default" class="panel-block is-active">
+                      <span class="panel-icon">
+                        <i class="zg-icon zg-check" aria-hidden="true"></i>
+                      </span>
+                      Default
+                    </a>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="field">
+          <label class="label">.gitignore</label>
+          <div class="control">
+            <input name="gitignore" value="" type="hidden">
+            <div id="gitignore-dropdown" class="dropdown">
+              <a id="gitignore-dropdown-trigger" class="button">
+                <span>None</span>
+                <span class="icon is-small">
+                  <i class="zg-icon zg-triangle-down" aria-hidden="true"></i>
+                </span>
+              </a>
+              <div id="gitignore-dropdown-menu" class="dropdown-menu" role="menu">
+                <div class="dropdown-content is-paddingless">
+                  <nav class="panel">
+                    <a name="g_none" class="panel-block is-active">
+                      <span class="panel-icon">
+                        <i class="zg-icon zg-check" aria-hidden="true"></i>
+                      </span>
+                      None
+                    </a>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">License</label>
+          <div class="control">
+            <input name="license" value="" type="hidden">
+            <div id="license-dropdown" class="dropdown">
+              <a id="license-dropdown-trigger" class="button">
+                <span>None</span>
+                <span class="icon is-small">
+                  <i class="zg-icon zg-triangle-down" aria-hidden="true"></i>
+                </span>
+              </a>
+              <div id="license-dropdown-menu" class="dropdown-menu" role="menu">
+                <div class="dropdown-content is-paddingless">
+                  <nav class="panel">
+                    <a name="l_none" class="panel-block is-active">
+                      <span class="panel-icon">
+                        <i class="zg-icon zg-check" aria-hidden="true"></i>
+                      </span>
+                      None
+                    </a>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <hr/>
+
+      <div class="field is-grouped is-pulled-right">
+        <input name="cancel" class="control button" type="reset" value="Cancel" href="/">
+        <input name="save" class="control button is-primary" type="submit" value="Create Project">
+      </div>
+    </form>
+  </div>
+</div>
+{%- endblock %}

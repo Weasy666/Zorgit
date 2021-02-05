@@ -1,0 +1,102 @@
+{% block title -%}{{ user.as_ref().unwrap().username }} • Dashboard • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="dashboard">
+  <div id="dashboard-sidebar-left" class="dashboard-sidebar">
+    <div id="context-dropdown" class="dropdown">
+      <a id="context-dropdown-trigger" class="button">
+        <span class="image is-24x24">
+          <img class="is-square-rounded" src="{{ contexts.first().unwrap().avatar.to_str().unwrap() }}" />
+        </span>
+        {{ contexts.first().unwrap().username }}
+        <span class="icon is-small">
+          <i class="zg-icon zg-triangle-down" aria-hidden="true"></i>
+        </span>
+      </a>
+      <div id="context-dropdown-menu" class="dropdown-menu" role="menu">
+        <div class="dropdown-content is-paddingless">
+          <div class="dropdown-item has-text-centered">
+            <p>Switch Dashboard context</p>
+          </div>
+          <nav class="panel">
+            {% for context in contexts -%}
+            <a name="c_{{context.id}}" class="panel-block {% if loop.first %}is-active{% endif %}">
+              <span class="panel-icon {% if !loop.first %}is-invisible{% endif %}">
+                <i class="zg-icon zg-check" aria-hidden="true"></i>
+              </span>
+              <span class="image is-24x24">
+                <img class="is-square-rounded" src="{{ context.avatar.to_str().unwrap() }}" />
+              </span>
+              {{ context.username }}
+            </a>
+            {%- endfor %}
+          </nav>
+        </div>
+      </div>
+    </div>
+    <hr/>
+    <div id="context-projects" class="context-projects">
+      <div class="title-bar">
+        <span>Projects</span>
+        <span class="badge">{{ projects.get(contexts.first().unwrap().id.borrow()).unwrap().len() }}</span>
+        <a class="icon is-small" href="/project/new"><i class="zg-icon zg-plus-circle" aria-hidden="true"></i></a>
+      </div>
+      <div class="search-bar">
+        <input class="input" type="text" placeholder="Find a project...">
+        <span class="icon is-small is-left">
+          <i class="zg-icon zg-search"></i>
+        </span>
+      </div>
+      {% for context in contexts -%}
+      <div name="c_{{context.id}}" class="{% if !loop.first %}is-invisible{% endif %}">
+        {% for project in projects.get(context.id.borrow()).unwrap() -%}
+        <div>
+          <a class="has-zg-icon" href='{{ project.url_relative() }}'>
+            <span class="icon is-medium-small">
+              <i class="zg-icon {% if project.is_private %}zg-lock{% else if project.is_fork %}zg-fork{% else if project.is_archived %}zg-archive{% else %}zg-book{% endif %}" aria-hidden="true"></i>
+            </span>
+            <span>{{ project.name }}</span>
+          </a>
+        </div>
+        {% if !loop.last -%}<hr/>{%- endif %}
+        {% endfor -%}
+      </div>
+      {%- endfor %}
+    </div>
+    <hr/>
+    <div id="context-organisations" class="context-organisations">
+      <div class="title-bar">
+        <span>Organisations</span>
+        <span class="badge">{{ num_orgs }}</span>
+        <a class="icon is-small" href="/org/new"><i class="zg-icon zg-plus-circle" aria-hidden="true"></i></a>
+      </div>
+      <div class="search-bar">
+        <input class="input" type="text" placeholder="Find an organisation...">
+        <span class="icon is-small is-left">
+          <i class="zg-icon zg-search"></i>
+        </span>
+      </div>
+      {% for org in contexts -%}
+      {% if org.is_organisation -%}
+      <div>
+        <a class="has-zg-icon" href='{{ org.url_relative() }}'>
+          <span class="icon is-medium-small">
+            <i class="zg-icon zg-users" aria-hidden="true"></i>
+          </span>
+          <span>{{ org.username }}</span>
+        </a>
+      </div>
+      {% if !loop.last -%}<hr/>{%- endif %}
+      {%- endif -%}
+      {%- endfor %}
+    </div>
+  </div>
+  <div id="dashboard-content" class="dashboard-content">
+    Here goes da feed 🦶✨ 😆
+  </div>
+  <div id="dashboard-sidebar-left" class="dashboard-sidebar">
+    Here will be the Stars✨ and Watchers⌚🕵️‍♂️
+  </div>
+</div>
+{%- endblock %}

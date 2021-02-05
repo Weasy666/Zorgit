@@ -1,0 +1,81 @@
+<div class="file-box boxed">
+  <h4 id="project-header" class="project-header">
+    {% let author -%}
+    {% if last_commit.is_some() && last_commit.as_ref().unwrap().author().is_some() -%}
+    {% let author = last_commit.as_ref().unwrap().author().unwrap() -%}
+    <a href="{{ author.url_relative() }}">
+      <span class="image is-24x24">
+        <img class="is-square-rounded" src="{{ author.avatar.to_str().unwrap() }}" />
+      </span>
+      {{ author.username }}
+    </a>
+    <a class="tag is-white sha" href="{{ project.url_relative() }}/commits/{{ last_commit.as_ref().unwrap().id() }}">
+      {{ last_commit.as_ref().unwrap().short_id() }}
+    </a>
+    <span class="commit-title">{{ last_commit.as_ref().unwrap().title().as_ref().unwrap() }}</span>
+
+    {% if last_commit.as_ref().unwrap().description().is_some() %}
+    <a class="toggle">
+      <span class="icon is-medium-small"><i class="zg-icon zg-triangle-down"></i></span>
+    </a>
+    {% endif %}
+    <span class="has-text-weight-normal is-pulled-right tooltip is-tooltip-bottom" data-tooltip="{{ last_commit.as_ref().unwrap().time().rfc3339() }}" style="font-size: 0.8em;">
+      {{ last_commit.as_ref().unwrap().time().humanize() }}
+    </span>
+    {% if last_commit.as_ref().unwrap().description().is_some() -%}
+    <div class="description is-hidden">
+      <hr/>
+      <div>
+      {{ last_commit.as_ref().unwrap().description().as_ref().unwrap() }}
+      </div>
+    </div>
+    {% endif -%}
+    {% endif -%}
+  </h4>
+
+  <table>
+    <tbody>
+      {% for (_, entry) in entries.as_ref().unwrap() -%}
+      <tr class="project-entry">
+        <td>
+          <span class="icon">
+          {% if entry.is_file -%}
+            <i class="zg-icon zg-file-text" aria-hidden="true"></i>
+          {% else -%}
+            <i class="zg-icon zg-folder" aria-hidden="true"></i>
+          {% endif -%}
+          </span>
+        </td>
+        <td><a href='{{ project.url_relative() }}/branches/{{ branch.as_ref().unwrap() }}/{{ entry.relative_url() }}'>{{ entry.name }}</a></td>
+        <td>
+        {% if entry.last_commit.is_some() -%}
+          <a href="{{ project.url_relative() }}/commits/{{ entry.last_commit.as_ref().unwrap().id() }}">
+          {{ entry.last_commit.as_ref().unwrap().title().as_ref().unwrap_or("".to_string().borrow()) }}
+          </a>
+        {% endif -%}
+        </td>
+        <td>
+        {% if entry.last_commit.is_some() -%}
+          <span class="is-size-7 is-pulled-right tooltip is-tooltip-bottom" data-tooltip="{{ entry.last_commit.as_ref().unwrap().time().rfc3339() }}">
+          {{ entry.last_commit.as_ref().unwrap().time().humanize() }}
+        {% endif -%}
+        </span></td>
+      </tr>
+      {% endfor -%}
+    </tbody>
+  </table>
+</div>
+
+{% if readme.is_some() -%}
+<div class="file-box boxed">
+  <h4 class="file-header">
+    {{ readme.as_ref().unwrap().name }} <span class="size">| {{ readme.as_ref().unwrap().size.humanize() }}</span>
+  </h4>
+
+  <div class="file-content">
+    <article class="markdown">
+      {{ readme.as_ref().unwrap().content_as_markdown_with_root(project.url_relative().borrow())|safe}}
+    </article>
+  </div>
+</div>
+{% endif -%}

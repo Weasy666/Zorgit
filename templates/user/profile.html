@@ -1,0 +1,7 @@
+{% block title -%}{{profile_user.username}} • Profile • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "../base/base.html" %}
+
+{% block content %}
+In the future here will be the glorious profile page of <a href="{{profile_user.url_relative()}}">{{profile_user.username}}</a>!!!
+{% include "../base/under_construction.html" %}
+{%- endblock %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{%- block title %}Zorgit - A slightly rusty Git{%- endblock %}</title>
+    {%- include "base/head.html" -%}
+  </head>
+
+  <body>
+    {% include "base/navbar.html" %}
+    <div id="">
+    {%- block content -%}Content{%- endblock %}
+    </div>
+    {%- include "base/footer.html" %}
+    {%- block scripts %}{% endblock %}
+  </body>
+
+</html>

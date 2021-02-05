@@ -1,0 +1,111 @@
+{% extends "../base/base.html" %}
+
+{% block content %}
+<!-- Project -->
+<div class="project-header has-background-white-bis">
+  <nav class="level container">
+    <div class="level-left">
+      <nav class="breadcrumb is-medium level-item" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <a href="/{{ project.owner.username }}">
+              <span class="icon"><i class="zg-icon {% if project.is_private %}zg-lock{% else if project.is_fork %}zg-fork{% else if project.is_archived %}zg-archive{% else %}zg-book{% endif %}" aria-hidden="true"></i></span>
+              <span>{{ project.owner.username }}</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ project.url_relative() }}" aria-current="project">{{ project.name }}</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="level-right">
+      <div class="field is-grouped">
+        <p class="control">
+          <span class="buttons has-addons">
+            <a class="button">
+              <span class="icon"><i class="zg-icon zg-eye"></i></span>
+              <span>Watch</span>
+            </a>
+            <a class="button" href="{{ project.url_relative() }}/watchers">{{ project.num_watches }}</a>
+          </span>
+        </p>
+        <p class="control">
+          <span class="buttons has-addons">
+            <a class="button">
+              <span class="icon"><i class="zg-icon zg-star"></i></span>
+              <span>Star</span>
+            </a>
+            <a class="button" href="{{ project.url_relative() }}/stars">{{ project.num_stars }}</a>
+          </span>
+        </p>
+        <p class="control">
+          <span class="buttons has-addons">
+            <a class="button">
+              <span class="icon"><i class="zg-icon zg-git-fork"></i></span>
+              <span>Fork</span>
+            </a>
+            <a class="button" href="{{ project.url_relative() }}/forks">{{ project.num_forks }}</a>
+          </span>
+        </p>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Tabs nav-controls -->
+  <div class="tabs-container">
+    <div class="tabs container">
+      <ul>
+        <li class="{% if active_tab == Tab::Code -%}is-active{% endif -%}">
+          <a href='{{ project.url_relative() }}{% if branch.is_some() && branch.as_ref().unwrap() != "master" -%}/branches/{{ branch.as_ref().unwrap() }}{% endif -%}'>
+            <span class="icon is-small"><i class="zg-icon zg-code" aria-hidden="true"></i></span>
+            <span>Code</span>
+          </a>
+        </li>
+        <li class="{% if active_tab == Tab::Issues -%}is-active{% endif -%}">
+          <a href="{{ project.url_relative() }}/issues">
+            <span class="icon is-small"><i class="zg-icon zg-warning" aria-hidden="true"></i></span>
+            <span>Issues</span>
+            <span class="badge">{{ project.num_issues }}</span>
+          </a>
+        </li>
+        <li class="{% if active_tab == Tab::Pulls -%}is-active{% endif -%}">
+          <a href="{{ project.url_relative() }}/pulls">
+            <span class="icon is-small"><i class="zg-icon zg-git-pull-request" aria-hidden="true"></i></span>
+            <span>Pull requests</span>
+            <span class="badge">{{ project.num_pull_reqs }}</span>
+          </a>
+        </li>
+        <li class="{% if active_tab == Tab::Releases -%}is-active{% endif -%}">
+          <a href="{{ project.url_relative() }}/releases">
+            <span class="icon is-small"><i class="zg-icon zg-tag is-horz-flipped" aria-hidden="true"></i></span>
+            <span>Releases</span>
+            <span class="badge">{{ project.num_releases }}</span>
+          </a>
+        </li>
+        <li class="{% if active_tab == Tab::Wiki -%}is-active{% endif -%}">
+          <a href="{{ project.url_relative() }}/wiki">
+            <span class="icon is-small"><i class="zg-icon zg-wiki" aria-hidden="true"></i></span>
+            <span>Wiki</span>
+          </a>
+        </li>
+        {% if user.is_some() && user.as_ref().unwrap() == project.owner.borrow() -%}
+        <li class="{% if active_tab == Tab::Settings -%}is-active{% endif -%}" style="margin-left: auto;">
+          <a href="{{ project.url_relative() }}/settings">
+            <span class="icon is-small"><i class="zg-icon zg-cog" aria-hidden="true"></i></span>
+            <span>Settings</span>
+          </a>
+        </li>
+        {% endif -%}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Tab panes -->
+<div class="container">
+  <div class="content">
+  {% block tab_content %}Project Tab Content{% endblock %}
+  </div>
+</div>
+{%- endblock %}

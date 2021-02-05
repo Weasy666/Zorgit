@@ -1,0 +1,60 @@
+{% match comment -%}
+  {% when Comment::Plain with (_) -%}
+  <div class="comment">
+    <div class="avatar">
+      <a href="{{ user.as_ref().unwrap().url_relative() }}">
+        {% if user.as_ref().is_some() -%}
+        <img class="is-square-rounded" src="{{ user.as_ref().unwrap().avatar.to_str().unwrap() }}" />
+        {%- else %}
+        <img class="is-square-rounded" src="https://bulma.io/images/placeholders/128x128.png" />
+        {%- endif %}
+      </a>
+    </div>
+    <div class="boxed">
+      <h4 class="header">
+        <a href="{{ user.as_ref().unwrap().url_relative() }}">{{ user.as_ref().unwrap().username }}</a> commented on <span class="tooltip is-tooltip-top" data-tooltip="{{ comment.created_pretty_time() }}">{{ comment.created_at.humanize() }}</span>
+      </h4>
+      <div>{{ comment.rendered_content(project.url_relative().borrow())|safe }}</div>
+    </div>
+  </div>
+  {%- when Comment::CommentRef with (_) -%}
+  {# <div class="comment comment-ref">
+      Comment CommentRef {{ comment.id() }}
+  </div> -#}
+  <div class="timeline-item">
+    <div class="timeline-marker is-icon">
+      <i class="zg-icon zg-hashtag"></i>
+    </div>
+    <div class="timeline-content">
+      <p class="heading">March 2017</p>
+      <p>Timeline content - Can include any HTML element</p>
+    </div>
+  </div>
+  {%- when Comment::CommitRef with (_) -%}
+  {# <div class="comment commit-ref">
+      Comment CommitRef {{ comment.id() }}
+  </div> -#}
+  <div class="timeline-item">
+    <div class="timeline-marker is-icon">
+      <i class="zg-icon zg-bolt"></i>
+    </div>
+    <div class="timeline-content">
+      <p class="heading">March 2017</p>
+      <p>Timeline content - Can include any HTML element</p>
+    </div>
+  </div>
+  {%- when Comment::IssueRef with (_) -%}
+  {# <div class="comment issue-ref">
+      Comment IssueRef {{ comment.id() }}
+  </div> -#}
+  <div class="timeline-item">
+    <div class="timeline-marker is-icon">
+      <i class="zg-icon zg-link"></i>
+    </div>
+    <div class="timeline-content">
+      <p class="heading">March 2017</p>
+      <p>Timeline content - Can include any HTML element</p>
+    </div>
+  </div>
+  {%- when Comment::Err with (_) -%}
+{% endmatch -%}

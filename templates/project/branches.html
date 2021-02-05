@@ -1,0 +1,32 @@
+{% block title -%}Branches • {{ project.owner.username }}/{{ project.name }} • Zorgit - A slightly rusty Git{% endblock -%}
+{% extends "base.html" %}
+
+{% block tab_content -%}
+
+<div id="issues-box" class="issues-box boxed">
+  {% if branches.is_some() -%}
+  {% for brnch in branches.as_ref().unwrap() -%}
+  <article class="issue">
+    <div class="issue-header">
+      <a href="{{ project.url_relative() }}/branches/{{ brnch.0 }}">{{ brnch.0 }}</a>
+      <span class="issue-header-right">
+        
+      </span>
+    </div>
+    <div class="issue-body is-hidden">
+      <div class="line-clamp-3">
+
+      </div>
+    </div>
+    <div class="issue-footer">
+      <a class="tag" href="{{ project.url_relative() }}/commits/{{ brnch.1.id() }}">{{ brnch.1.short_id() }}</a>
+      <span>{{ brnch.1.title().unwrap() }}</span> • 
+      <span>
+        committed <span class="tooltip is-tooltip-bottom" data-tooltip="{{ brnch.1.time().rfc3339() }}">{{ brnch.1.time().humanize() }}</span> by <a href="{{ brnch.1.author().unwrap().url_relative() }}">{{ brnch.1.author().unwrap().username }}</a>
+      </span>
+    </div>
+  </article>
+  {% endfor -%}
+  {% endif -%}
+</div>
+{% endblock -%}

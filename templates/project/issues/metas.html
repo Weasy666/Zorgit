@@ -1,0 +1,107 @@
+<div id="issue-labels-wrapper">
+  <input id="label-ids" name="label_ids" value="{%- if active_labels.is_some() -%}
+  {%- for l in active_labels.as_ref().unwrap() -%}
+    {%- if loop.last -%}
+      {{- l -}}
+    {%- else -%}
+      {{- l -}},
+    {%- endif -%}
+  {%- endfor -%}
+  {%- endif -%}" type="hidden">
+  <span class="subtitle">Labels</span>
+  <div id="labels-dropdown" class="dropdown">
+    <a id="labels-dropdown-trigger" class="dropdown-trigger icon is-small"><i class="zg-icon zg-plus-circle" aria-hidden="true"></i></a>
+    <div id="labels-dropdown-menu" class="dropdown-menu" role="menu">
+      <div class="dropdown-content is-paddingless">
+        <nav class="panel">
+          <div class="panel-block">
+            <span class="control has-icons-left">
+              <input class="input is-small" type="text" placeholder="Search for labels...">
+              <span class="icon is-small is-left">
+                <i class="zg-icon zg-search" aria-hidden="true"></i>
+              </span>
+            </span>
+          </div>
+          {% if labels.is_some() -%}
+          {% for label in labels.as_ref().unwrap() -%}
+          <a name="l_{{label.id}}" data-value="{{label.id}}" class="panel-block {% if active_labels.is_some() && active_labels.as_ref().unwrap().contains(label.id.borrow()) %}is-active{% endif %}">
+            <span class="panel-icon {% if active_labels.is_none() || !active_labels.as_ref().unwrap().contains(label.id.borrow()) %}is-invisible{% endif %}">
+              <i class="zg-icon zg-check" aria-hidden="true"></i>
+            </span>
+            <div class="color" style="background-color: {{ label.color }}"></div>
+            {{ label.name }}
+          </a>
+          {% endfor -%}
+          {% else -%}
+          {% endif -%}
+          <a id="labels-edit" class="panel-block" href="{{ project.url_relative() }}/issues/labels">
+            <span class="panel-icon">
+              <i class="zg-icon zg-pencil" aria-hidden="true"></i>
+            </span>
+            Edit labels
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <div id="labels-tags-box" class="labels-box">
+    {% if labels.is_some() -%}
+    {% for label in labels.as_ref().unwrap() -%}
+    <span name="l_{{label.id}}" data-value="{{label.id}}" class="tag {% if active_labels.is_none() || !active_labels.as_ref().unwrap().contains(label.id.borrow()) %}is-hidden{% endif %}" style="background-color: {{ label.color }};">{{ label.name }}<a class="delete is-small"></a></span>
+    {% endfor -%}
+    {% else -%}
+    {% endif -%}
+  </div>
+</div>
+<hr/>
+<div id="issue-assignees-wrapper">
+  <input name="assignee_ids" value="{%- if active_assignees.is_some() -%}
+  {%- for a in active_assignees.as_ref().unwrap() -%}
+    {%- if loop.last -%}
+      {{- a -}}
+    {%- else -%}
+      {{- a -}},
+    {%- endif -%}
+  {%- endfor -%}
+  {%- endif -%}" type="hidden">
+  <span class="subtitle">Assignees</span>
+  <div id="assignees-dropdown" class="dropdown">
+    <a id="assignees-dropdown-trigger" class="dropdown-trigger icon is-small"><i class="zg-icon zg-plus-circle" aria-hidden="true"></i></a>
+    <div id="assignees-dropdown-menu" class="dropdown-menu" role="menu">
+      <div class="dropdown-content is-paddingless">
+        <nav class="panel">
+          <div class="panel-block">
+            <span class="control has-icons-left">
+              <input class="input is-small" type="text" placeholder="Search for people...">
+              <span class="icon is-small is-left">
+                <i class="zg-icon zg-search" aria-hidden="true"></i>
+              </span>
+            </span>
+          </div>
+          {% for person in collaborators -%}
+          <a name="p_{{person.id}}" data-value="{{person.id}}" class="panel-block {% if active_assignees.is_some() && active_assignees.as_ref().unwrap().contains(person.id.borrow()) %}is-active{% endif %}">
+            <span class="panel-icon {% if active_assignees.is_none() || !active_assignees.as_ref().unwrap().contains(person.id.borrow()) %}is-invisible{% endif %}">
+              <i class="zg-icon zg-check" aria-hidden="true"></i>
+            </span>
+            <span class="image is-24x24">
+              <img class="is-square-rounded" src="{{ person.avatar.to_str().unwrap() }}" />
+            </span>
+            {{ person.username }}
+          </a>
+          {% endfor -%}
+        </nav>
+      </div>
+    </div>
+  </div>
+  <div id="assignees-tags-box" class="labels-box">
+    {% for person in collaborators -%}
+    <span name="p_{{person.id}}" data-value="{{person.id}}" class="tag {% if active_assignees.is_none() || !active_assignees.as_ref().unwrap().contains(person.id.borrow()) %}is-hidden{% endif %}">
+      <span class="image is-24x24">
+        <img class="is-square-rounded" src="{{ person.avatar.to_str().unwrap() }}" />
+      </span>
+      {{ person.username }}
+      <a class="delete is-small"></a>
+    </span>
+    {% endfor -%}
+  </div>
+</div>
