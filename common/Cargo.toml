@@ -5,19 +5,23 @@ authors = ["Daniel Wiesenberg <weasy@hotmail.de>"]
 edition = "2018"
 
 [dependencies]
-rocket = { git = "https://github.com/SergioBenitez/Rocket/", rev = "0c150c2", default-features = false }
-url = { version = "2.1.1", default-features = false, features = ["serde"] }
-syntect = { version = "4.4.0", default-features = false, features = ["default-fancy"] }
-time = { version = "0.2.22", default-features = false, features = ["std", "serde"] }
-uuid = { version = "0.8.1", default-features = false, features = ["serde", "v4", "v5"] }
+zorgit_security = { path = "../security" }
+rocket = { git = "https://github.com/SergioBenitez/Rocket/", rev = "c24f15c", default-features = false }
+rocket_contrib = { git = "https://github.com/SergioBenitez/Rocket/", rev = "c24f15c", default-features = false }
+rocket_airlock = { git = "https://github.com/Weasy666/rocket_airlock" }
+#rocket_airlock = { path = "../../rocket_airlock" }
+url = { version = "2.2.0", default-features = false, features = ["serde"] }
+syntect = { version = "4.5.0", default-features = false, features = ["default-fancy"] }
+time = { version = "0.2.25", default-features = false, features = ["std", "serde"] }
+uuid = { version = "0.8.2", default-features = false, features = ["serde", "v4", "v5"] }
 sha1 = "0.6.0"
-serde = { version = "1.0.117", default-features = false, features = ["derive"] }
-serde_json = { version = "1.0.59", default-features = false, features = ["std"] }
-anyhow = "1.0.34"
+serde = { version = "1.0.123", default-features = false, features = ["derive"] }
+serde_json = { version = "1.0.61", default-features = false, features = ["std"] }
+anyhow = "1.0.38"
 fast_chemail = "0.9.6"
-rand = { version = "0.7.3", default-features = false, features = ["std"] }
-rand_chacha = "0.2.2"
-rust-argon2 = "0.8.2" # features = ["crossbeam-utils"]
-data-encoding = "2.3.1"
+rand = { version = "0.8.3", default-features = false, features = ["std"] }
+rand_chacha = "0.3.0"
+rust-argon2 = "0.8.3" # features = ["crossbeam-utils"]
+data-encoding = "2.3.2"
 unic-langid = "0.9.0"
 blockies = "0.3.0"
