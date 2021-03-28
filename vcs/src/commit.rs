@@ -2,8 +2,8 @@ use time::OffsetDateTime;
 
 #[derive(Debug, Clone)]
 pub struct Signature {
-    name: String,
-    email: String,
+    pub name: String,
+    pub email: String,
 }
 
 #[derive(Debug, Clone)]

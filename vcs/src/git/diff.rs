@@ -18,8 +18,8 @@ pub fn diff_from_to(repo: &Repository, from: Option<&Commit>, to: Option<&Commit
 
 pub fn _diff_from_to<'a>(repo: &'a Repository, from: Option<&git2::Commit<'a>>, to: Option<&git2::Commit<'a>>) -> Result<Diff> {
     let mut diff_opts = DiffOptions::new();
-    let mut diff_find_opts = DiffFindOptions::new()
-        .renames(true);
+    let mut diff_find_opts = DiffFindOptions::new();
+    diff_find_opts.renames(true);
     let mut old = None;
     let mut new = None;
     if let Some(from) = from {

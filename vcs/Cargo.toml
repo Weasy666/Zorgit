@@ -6,13 +6,14 @@ edition = "2018"
 
 [dependencies]
 zorgit_common = { path = "../common" }
-rocket = { git = "https://github.com/SergioBenitez/Rocket/", rev = "c24f15c", default-features = false }
+zorgit_security = { path = "../security" }
+rocket = { git = "https://github.com/SergioBenitez/Rocket/", default-features = false }
 syntect = { version = "4.5.0", default-features = false, features = ["default-fancy"] }
-async-trait = "0.1.42"
-futures = "0.3.12"
-tokio = { version = "1.1.1", default-features = false, features = ["process"] }
-time = "0.2.25"
+async-trait = "0.1.48"
+futures = "0.3.13"
+tokio = { version = "1.4.0", default-features = false, features = ["process"] }
+time = "0.2.26"
 git2 = "0.13.17"
 #find_git = "1.2.0"
-anyhow = "1.0.38"
+anyhow = "1.0.40"
 

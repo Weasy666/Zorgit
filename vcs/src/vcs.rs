@@ -1,4 +1,5 @@
 use std::path::{Path, PathBuf};
+use rocket::Route;
 use crate::{Commit, Diff, Result, SourceEntry};
 
 pub type SourceEntries = Vec<(PathBuf,SourceEntry)>;
@@ -54,5 +55,5 @@ pub trait VersionControl: Sized {
 
 pub trait Server {
     const EXT: &'static str;
-    const ROUTES: &'static [rocket::Route];
+    fn routes() -> Vec<Route> { Vec::new() }
 }
