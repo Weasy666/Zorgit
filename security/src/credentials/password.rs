@@ -30,12 +30,12 @@ impl Password {
         }
     }
 
-    /// Parses the given String as password and enforces global password rules on parsing.
-    /// It is assumed that every use of `.parse::<Password>()` or `Password::from_str()`
-    /// is used on a String representation of a plain password.
-    pub fn from_hash_str<S: AsRef<str>>(plain_pwd: S) -> Result<Password, Box<dyn Error>> {
-        todo!()
-    }
+    // /// Parses the given String as password and enforces global password rules on parsing.
+    // /// It is assumed that every use of `.parse::<Password>()` or `Password::from_str()`
+    // /// is used on a String representation of a plain password.
+    // pub fn from_hash_str<S: AsRef<str>>(plain_pwd: S) -> Result<Password, Box<dyn Error>> {
+    //     todo!()
+    // }
 
     /// Consumes current plain text password and creates a new one, hashed with argon2.
     pub fn hash(self) -> Password {

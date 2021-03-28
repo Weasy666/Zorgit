@@ -1,8 +1,11 @@
 use std::ops::{Deref, DerefMut};
 use std::str::FromStr;
 use anyhow::{anyhow, Result};
-use rocket::http::RawStr;
-use rocket::request::{FromFormValue, FromParam};
+use rocket::{
+    data::ToByteUnit,
+    form::{self, DataField, FromForm, FromFormField, ValueField},
+    request::FromParam
+};
 
 
 #[derive(Clone, Debug)]
@@ -18,19 +21,39 @@ impl Sha1 {
     }
 }
 
-impl<'a> FromFormValue<'a> for Sha1 {
-    type Error = &'a RawStr;
+#[rocket::async_trait]
+impl<'r> FromFormField<'r> for Sha1 {
+    fn from_value(field: ValueField<'r>) -> form::Result<'r, Self> {
+        Ok(field.value.parse::<Sha1>()
+            .map_err(|e| form::Error::validation(format!("{}", e)))?)
+    }
 
-    fn from_form_value(form_value: &'a RawStr) -> Result<Sha1, Self::Error> {
-        form_value.parse::<Sha1>()
-            .map_err(|_| form_value)
+    async fn from_data(field: DataField<'r, '_>) -> form::Result<'r, Self> {
+        // Retrieve the configured data limit or use `256KiB` as default.
+        let limit = field.request.limits()
+            .get("sha1")
+            .unwrap_or(20.bytes());
+
+        // Read the capped data stream, returning a limit error as needed.
+        let bytes = field.data.open(limit).into_bytes().await?;
+        if !bytes.is_complete() {
+            Err((None, Some(limit)))?;
+        }
+
+        // Store the bytes in request-local cache and split at ':'.
+        let bytes = bytes.into_inner();
+        let bytes = rocket::request::local_cache!(field.request, bytes);
+        // Try to parse the name as UTF-8 or return an error if it fails.
+        let hash = std::str::from_utf8(bytes)?;
+        Ok(hash.parse::<Sha1>()
+            .map_err(|e| form::Error::validation(format!("{}", e)))?)
     }
 }
 
-impl<'a> FromParam<'a> for Sha1 {
-    type Error = &'a RawStr;
+impl<'r> FromParam<'r> for Sha1 {
+    type Error = &'r str;
 
-    fn from_param(param: &'a RawStr) -> Result<Sha1, Self::Error> {
+    fn from_param(param: &'r str) -> Result<Sha1, Self::Error> {
         param.parse::<Sha1>()
             .map_err(|_| param)
     }

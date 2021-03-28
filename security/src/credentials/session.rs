@@ -2,6 +2,7 @@ use std::error::Error;
 use argon2;
 use rand::{RngCore, SeedableRng};
 use rand_chacha::ChaChaRng;
+use rocket::http::{Cookie, SameSite};
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 
@@ -45,26 +46,36 @@ impl PartialEq for SessionToken {
     }
 }
 
+impl std::fmt::Display for SessionToken {
+    #[inline]
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            SessionToken::Hashed(hash) => write!(f, "{}", hash),
+            SessionToken::Plain(_) => panic!("It is not allowed to convert or display a plain session token. You must hash it first."),
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct Session {
-        pub(crate) user_id: String,
-        pub(crate) created_at: OffsetDateTime,
-        pub(crate) expires_at: OffsetDateTime,
-        pub(crate) token: SessionToken,
+        pub user_id: String,
+        pub created_at: OffsetDateTime,
+        pub expires_at: OffsetDateTime,
+        pub token: SessionToken,
 }
 
 impl Session {
-    // pub fn to_cookie(self) -> Result<Cookie<'static>, Box<dyn Error>> {
-    //     match self {
-    //         Self::Plain {key, token, ..} => {
-    //             Ok(Cookie::build(key, token)
-    //                 .same_site(SameSite::Strict)
-    //                 .http_only(true)
-    //                 .finish())
-    //          }
-    //         Self::Hashed {..} => Err("You tried to create a cookie from a hashed session, this is not allowed.")?,
-    //     }
-    // }
+    pub fn to_cookie(self, session_key: &str) -> Result<Cookie<'_>, Box<dyn Error>> {
+        match self.token {
+            SessionToken::Plain(token) => {
+                Ok(Cookie::build(session_key, token)
+                    .same_site(SameSite::Strict)
+                    .http_only(true)
+                    .finish())
+             }
+             SessionToken::Hashed(_) => Err("You tried to create a cookie from a session with a hashed token, this is not allowed.")?,
+        }
+    }
 
     pub fn validate(&self, plain_token: &SessionToken) -> Result<bool, Box<dyn Error>> {
         match plain_token {

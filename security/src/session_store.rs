@@ -113,10 +113,10 @@ impl Communicator for SessionStore {
 }
 
 #[rocket::async_trait]
-impl<'a, 'r> FromRequest<'a, 'r> for SessionStore {
+impl<'r> FromRequest<'r> for SessionStore {
     type Error = ();
 
-    async fn from_request(request: &'a Request<'r>) -> request::Outcome<Self, Self::Error> {
+    async fn from_request(request: &'r Request<'_>) -> request::Outcome<Self, Self::Error> {
         let db = try_outcome!(request.guard::<State<crate::SessionStore>>().await);
         request::Outcome::Success(SessionStore(db.0.clone()))
     }

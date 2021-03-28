@@ -1,18 +1,19 @@
 mod avatar;
 mod dotfile;
 mod email;
-mod entity;
+pub mod entities;
+mod id;
 mod notification;
-mod password;
+mod project;
 mod sha1;
 mod url;
 
 pub use avatar::Avatar;
 pub use dotfile::DotFile;
 pub use email::Email;
-pub use entity::Entity;
+pub use id::Id;
 pub use notification::Notification;
-pub use password::Password;
+pub use project::Project;
 pub use crate::sha1::Sha1;
 pub use crate::url::Url;
 

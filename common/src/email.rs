@@ -1,14 +1,17 @@
 use std::str::FromStr;
 use fast_chemail;
-use rocket::http::RawStr;
-use rocket::request::{FromForm, FromFormValue, FormItems, FromParam};
+use rocket::{
+    data::ToByteUnit,
+    form::{self, DataField, FromForm, FromFormField, ValueField},
+    http::RawStr,
+    request::FromParam
+};
 use time::OffsetDateTime;
-use crate::{Notification, Sha1};
+use crate::{Id, Notification, Sha1};
 
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub struct Email {
-    pub id: i32,
     pub address: String,
     pub is_primary: bool,
     pub activated_at: Option<OffsetDateTime>,
@@ -28,20 +31,40 @@ impl Email {
     }
 }
 
-impl<'a> FromFormValue<'a> for Email {
-    type Error = &'a RawStr;
+#[rocket::async_trait]
+impl<'r> FromFormField<'r> for Email {
+    fn from_value(field: ValueField<'r>) -> form::Result<'r, Self> {
+        Ok(field.value.parse::<Email>()
+            .map_err(|e| form::Error::validation(format!("{}", e)))?)
+    }
 
-    fn from_form_value(form_value: &'a RawStr) -> Result<Email, Self::Error> {
-        form_value.parse::<Email>()
-            .map_err(|_| form_value)
+    async fn from_data(field: DataField<'r, '_>) -> form::Result<'r, Self> {
+        // Retrieve the configured data limit or use `256KiB` as default.
+        let limit = field.request.limits()
+            .get("email")
+            .unwrap_or(256.kibibytes());
+
+        // Read the capped data stream, returning a limit error as needed.
+        let bytes = field.data.open(limit).into_bytes().await?;
+        if !bytes.is_complete() {
+            Err((None, Some(limit)))?;
+        }
+
+        // Store the bytes in request-local cache and split at ':'.
+        let bytes = bytes.into_inner();
+        let bytes = rocket::request::local_cache!(field.request, bytes);
+        // Try to parse the name as UTF-8 or return an error if it fails.
+        let email = std::str::from_utf8(bytes)?;
+        Ok(email.parse::<Email>()
+            .map_err(|e| form::Error::validation(format!("{}", e)))?)
     }
 }
 
-impl<'a> FromParam<'a> for Email {
-    type Error = &'a RawStr;
+impl<'r> FromParam<'r> for Email {
+    type Error = &'r str;
 
-    fn from_param(param: &'a RawStr) -> Result<Email, Self::Error> {
-        param.parse::<Email>()
+    fn from_param(param: &'r str) -> Result<Email, Self::Error> {
+        RawStr::new(param).parse::<Email>()
             .map_err(|_| param)
     }
 }
@@ -52,7 +75,6 @@ impl FromStr for Email {
     fn from_str(s: &str) -> Result<Email, Self::Err> {
         fast_chemail::parse_email(s)?;
         Ok(Email {
-            id: -1,
             address: s.to_string(),
             is_primary: false,
             activated_at: None,

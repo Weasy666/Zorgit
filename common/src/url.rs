@@ -1,8 +1,10 @@
 use std::collections::HashMap;
 use std::ops::{Deref, DerefMut};
 use std::str::FromStr;
-use rocket::http::RawStr;
-use rocket::request::{FromFormValue, FromParam};
+use rocket::{
+    data::ToByteUnit,
+    form::{self, DataField, FromForm, FromFormField, ValueField}
+};
 use serde::de::{self, Deserialize, Deserializer, Visitor, MapAccess};
 use url::Url as ServoUrl;
 
@@ -31,19 +33,32 @@ impl From<ServoUrl> for Url {
     }
 }
 
-impl<'a> FromFormValue<'a> for Url {
-    type Error = Box<dyn std::error::Error>;
-
-    fn from_form_value(form_value: &'a RawStr) -> Result<Url, Self::Error> {
-        Ok(form_value.parse::<Url>()?)
+#[rocket::async_trait]
+impl<'r> FromFormField<'r> for Url {
+    fn from_value(field: ValueField<'r>) -> form::Result<'r, Self> {
+        Ok(field.value.parse::<Url>()
+            .map_err(|e| form::Error::validation(format!("{}", e)))?)
     }
-}
 
-impl<'a> FromParam<'a> for Url {
-    type Error = Box<dyn std::error::Error>;
+    async fn from_data(field: DataField<'r, '_>) -> form::Result<'r, Self> {
+        // Retrieve the configured data limit or use `256KiB` as default.
+        let limit = field.request.limits()
+            .get("url")
+            .unwrap_or(64.kibibytes());
 
-    fn from_param(param: &'a RawStr) -> Result<Url, Self::Error> {
-        Ok(param.parse::<Url>()?)
+        // Read the capped data stream, returning a limit error as needed.
+        let bytes = field.data.open(limit).into_bytes().await?;
+        if !bytes.is_complete() {
+            Err((None, Some(limit)))?;
+        }
+
+        // Store the bytes in request-local cache and split at ':'.
+        let bytes = bytes.into_inner();
+        let bytes = rocket::request::local_cache!(field.request, bytes);
+        // Try to parse the name as UTF-8 or return an error if it fails.
+        let url = std::str::from_utf8(bytes)?;
+        Ok(url.parse::<Url>()
+            .map_err(|e| form::Error::validation(format!("{}", e)))?)
     }
 }
 

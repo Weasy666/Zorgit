@@ -1,19 +1,16 @@
 use std::error::Error;
-use std::str::FromStr;
 use rocket::{
-    info, info_, log_, Rocket, Route, try_outcome,
+    info, info_, log_, Rocket,
     config::SecretKey,
-    http::{Cookie, CookieJar, SameSite, Status},
-    response::Redirect,
     request::Request
 };
-use rocket_airlock::{Airlock, Communicator, Hatch};
+use rocket_airlock::{Communicator, Hatch};
 use serde::Deserialize;
-use crate::{BasicAuth, Session, credentials::SessionToken};
+use crate::{BasicAuth, Session, SessionStore, credentials::SessionToken};
 
 pub struct AuthHatch {
     config: Config,
-    comm: crate::SessionStore,
+    comm: SessionStore,
 }
 
 impl<'a> AuthHatch {
@@ -35,13 +32,13 @@ impl<'a> AuthHatch {
             .value()
             .to_string();
 
-        // username+0xff+plain_sessiontoken
-        let mut username_token = session_cookie.as_bytes()
+        // userid+0xff+plain_sessiontoken
+        let mut userid_token = session_cookie.as_bytes()
             .splitn(2 ,|&b| b == 0xff);
-        let username = String::from_utf8_lossy(username_token.next().unwrap());
-        let plain_token = SessionToken::from_bytes(username_token.next().unwrap())?;
+        let userid = String::from_utf8_lossy(userid_token.next().unwrap());
+        let plain_token = SessionToken::from_bytes(userid_token.next().unwrap())?;
 
-        if let Some(session) = self.comm.session_by_token("user_id", plain_token)? {
+        if let Some(session) = self.comm.session_by_token(&userid, plain_token)? {
             Ok(session)
         } else {
             Err("No Session found!")?
@@ -71,10 +68,6 @@ impl Hatch for AuthHatch {
 
     fn name() -> &'static str { "Auth" }
 
-    fn routes() -> Vec<Route> {
-        rocket::routes![login]
-    }
-
     async fn from(rocket: &Rocket) -> Result<AuthHatch, Box<dyn std::error::Error>> {
         let name = AuthHatch::name().replace(" ", "").to_lowercase();
         let config = rocket.figment().extract_inner::<Config>(&format!("airlock.{}", name))?;
@@ -97,9 +90,4 @@ struct Config {
     pub session_key: String,
     /// Duration of a login session in days
     pub session_duration: Days,
-}
-
-#[rocket::post("/login?<redirect_to>", data = "<login>")]
-pub fn login(airlock: Airlock<AuthHatch>, redirect_to: String, login: String) -> Result<Redirect, Status> {
-    todo!()
 }
