@@ -1,0 +1,28 @@
+[package]
+name = "zorgit_db"
+version = "0.1.0"
+authors = ["Daniel Wiesenberg <weasy@hotmail.de>"]
+edition = "2018"
+
+[dependencies]
+zorgit_security = { path = "../security" }
+rocket = { git = "https://github.com/SergioBenitez/Rocket/", default-features = false }
+rocket_contrib = { git = "https://github.com/SergioBenitez/Rocket/", default-features = false }
+rocket_airlock = { git = "https://github.com/Weasy666/rocket_airlock" }
+#rocket_airlock = { path = "../../rocket_airlock" }
+# tokio + rustls
+sqlx = { version = "0.5.1", features = [ "runtime-tokio-rustls", "macros", "postgres", "time", "uuid", "migrate" ] }
+url = { version = "2.2.1", default-features = false, features = ["serde"] }
+time = { version = "0.2.26", default-features = false, features = ["std", "serde"] }
+uuid = { version = "0.8.2", default-features = false, features = ["serde", "v4", "v5"] }
+sha1 = "0.6.0"
+serde = { version = "1.0.125", default-features = false, features = ["derive"] }
+serde_json = { version = "1.0.64", default-features = false, features = ["std"] }
+anyhow = "1.0.40"
+fast_chemail = "0.9.6"
+rand = { version = "0.8.3", default-features = false, features = ["std"] }
+rand_chacha = "0.3.0"
+rust-argon2 = "0.8.3" # features = ["crossbeam-utils"]
+data-encoding = "2.3.2"
+unic-langid = "0.9.0"
+blockies = "0.3.0"
