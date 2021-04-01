@@ -5,11 +5,11 @@ use rocket::{
     data::ToByteUnit,
     form::{self, DataField, FromForm, FromFormField, ValueField}
 };
-use serde::de::{self, Deserialize, Deserializer, Visitor, MapAccess};
+use serde::{Serialize, de::{self, Deserialize, Deserializer, Visitor, MapAccess}};
 use url::Url as ServoUrl;
 
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub struct Url(ServoUrl);
 
 

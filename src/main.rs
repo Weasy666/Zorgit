@@ -1,16 +1,15 @@
 #![warn(rust_2018_idioms)]
 use std::path::PathBuf;
-use rocket::launch;
 use rocket_contrib::serve::StaticFiles;
+use zorgit_security::{AuthHatch, rocket_airlock::Airlock};
 use crate::config::ZorgitConfig;
-use zorgit_common;
+use zorgit_common::Url;
 use zorgit_vcs;
 
 mod config;
-mod url;
 
 
-#[launch]
+#[rocket::launch]
 fn rocket() -> _ {
     let figment = ZorgitConfig::figment();
 
@@ -20,4 +19,5 @@ fn rocket() -> _ {
         .mount("/static/img/", StaticFiles::from("assets/Logos"))
         .mount("/avatars", StaticFiles::from(avatars))
         .attach(ZorgitConfig::attach())
+        .attach(Airlock::<AuthHatch>::fairing())
 }

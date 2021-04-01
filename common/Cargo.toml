@@ -5,6 +5,7 @@ authors = ["Daniel Wiesenberg <weasy@hotmail.de>"]
 edition = "2018"
 
 [dependencies]
+zorgit_db = { path = "../db" }
 zorgit_security = { path = "../security" }
 rocket = { git = "https://github.com/SergioBenitez/Rocket/", default-features = false }
 rocket_contrib = { git = "https://github.com/SergioBenitez/Rocket/", default-features = false }

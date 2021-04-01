@@ -1,6 +1,7 @@
 use std::path::PathBuf;
-use rocket::request::FromParam;
+use rocket::{request::FromRequest, try_outcome};
 use time::OffsetDateTime;
+use zorgit_db::Database;
 use crate::{Id, Url, entities::Owner};
 
 pub struct Project {
@@ -42,10 +43,20 @@ pub struct Project {
     pub dir: PathBuf,
 }
 
-impl<'r> FromParam<'r> for Project {
-    type Error = Box<dyn std::error::Error>;
+#[rocket::async_trait]
+impl<'r> FromRequest<'r> for Project {
+    type Error = ();
 
-    fn from_param(param: &'r str) -> Result<Self, Self::Error> {
+    async fn from_request(request: &'r rocket::Request<'_>) -> rocket::request::Outcome<Self, Self::Error> {
+        // We assume here, that we have a route structure like this:
+        // #[get("/<_owner>/<_project_name>/")]
+        // If this is not the case, but we still need `FromRequest`, then we need
+        // to create a wrapper type for that use case.
+        if let Some(project_name) = request.routed_segment(1) {
+            //TODO: get the Project from the database
+            let db = try_outcome!(request.guard::<Database>().await);
+        }
+
         todo!()
     }
 }

@@ -2,7 +2,7 @@ use std::borrow::Borrow;
 use std::str::FromStr;
 use rocket::{
     data::ToByteUnit,
-    form::{self, DataField, FromForm, FromFormField, ValueField},
+    form::{self, DataField, FromFormField, ValueField},
     request::FromParam
 };
 

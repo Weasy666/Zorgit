@@ -1,6 +1,6 @@
 use std::path::PathBuf;
-use crate::url::Url;
 use serde::{Deserialize, Serialize};
+use zorgit_common::Url;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename = "mailer")]

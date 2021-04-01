@@ -1,9 +1,7 @@
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
-use crate::url::Url;
-use mailer::Config as MailerConfig;
-use chrono::prelude::{Timelike, Utc};
 use directories::{ProjectDirs, UserDirs};
+use mailer::Config as MailerConfig;
 use rocket::{
     error,
     config::{Config, SecretKey},
@@ -11,6 +9,8 @@ use rocket::{
     figment::{Figment, providers::{Format, Toml, Serialized, Env}},
 };
 use serde::{Deserialize, Serialize};
+use time::OffsetDateTime;
+use zorgit_common::Url;
 
 pub mod mailer;
 
@@ -19,6 +19,7 @@ pub mod mailer;
 pub struct ZorgitConfig {
     /// The server domain. This is used for generating links and for configuration of Rocket.
     pub domain: Url,
+    #[serde(skip_serializing)]
     /// Secret key that is used as seed
     pub secret_key: SecretKey,
     /// Name with which the session value will be added to a cookie
@@ -100,7 +101,7 @@ impl ZorgitConfig {
     }
 
     pub fn project_temp_dir(project_name: &str) -> PathBuf {
-        let dir = std::env::temp_dir().join(&format!("Temp/zorgit_{}_{}", project_name, Utc::now().nanosecond()));
+        let dir = std::env::temp_dir().join(&format!("Temp/zorgit_{}_{}", project_name, OffsetDateTime::now_utc().unix_timestamp()));
         std::fs::create_dir_all(&dir).unwrap_or_else(|e| {
             error!("{}", e);
             panic!("aborting due to dir creation error(s)")

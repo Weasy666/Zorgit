@@ -2,12 +2,12 @@ use std::str::FromStr;
 use fast_chemail;
 use rocket::{
     data::ToByteUnit,
-    form::{self, DataField, FromForm, FromFormField, ValueField},
+    form::{self, DataField, FromFormField, ValueField},
     http::RawStr,
     request::FromParam
 };
 use time::OffsetDateTime;
-use crate::{Id, Notification, Sha1};
+use crate::Notification;
 
 
 #[derive(Debug)]

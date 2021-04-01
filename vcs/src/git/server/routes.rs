@@ -70,9 +70,9 @@ impl<'r> GitResponse<'r> for ResponseBuilder<'r> {
 
 
 //################# Smart git protocol #################
-#[get("/<_owner>/<project>/info/refs?<service>")]
-pub async fn info_refs_get(_owner: Owner, project: Project, service: Service, logged_user: Option<User>) -> Response<'static> {
-    if project.is_private && logged_user.is_none() {
+#[get("/<_owner>/<_project_name>/info/refs?<service>")]
+pub async fn info_refs_get(_owner: Owner, _project_name: &str, project: Project, service: Service, logged_user: Option<User>) -> Response<'static> {
+    if project.is_private {
         return Response::build().unauthorized().finalize();
     }
 
@@ -88,8 +88,8 @@ pub async fn info_refs_get(_owner: Owner, project: Project, service: Service, lo
     }
 }
 
-#[post("/<_owner>/<project>/git-upload-pack", data = "<data>")]
-pub async fn upload_pack_post(_owner: Owner, project: Project, data: Data, _logged_user: User) -> Response<'static> {
+#[post("/<_owner>/<_project_name>/git-upload-pack", data = "<data>")]
+pub async fn upload_pack_post(_owner: Owner, _project_name: &str, project: Project, data: Data, _logged_user: User) -> Response<'static> {
     let data = git::server::upload_pack(project.dir, data.open(UPLOAD_LIMIT.mebibytes())).await;
 
     match data {
@@ -102,8 +102,8 @@ pub async fn upload_pack_post(_owner: Owner, project: Project, data: Data, _logg
     }
 }
 
-#[post("/<_owner>/<project>/git-receive-pack", data = "<data>")]
-pub async fn receive_pack_post(_owner: Owner, project: Project, data: Data, _logged_user: User) -> Response<'static> {
+#[post("/<_owner>/<_project_name>/git-receive-pack", data = "<data>")]
+pub async fn receive_pack_post(_owner: Owner, _project_name: &str, project: Project, data: Data, _logged_user: User) -> Response<'static> {
     let data = git::server::receive_pack(project.dir, data.open(UPLOAD_LIMIT.mebibytes())).await;
 
     match data {
@@ -119,37 +119,37 @@ pub async fn receive_pack_post(_owner: Owner, project: Project, data: Data, _log
 //################# Dumb git protocol #################
 const NO_DUMB_GIT_MSG: &str = "This server does not support the dumb git protocol. Please use the smart git protocol.";
 
-#[get("/<_owner>/<_project>/HEAD")]
-pub fn head_get(_owner: Owner, _project: Project) -> status::Custom<&'static str> {
+#[get("/<_owner>/<_project_name>/HEAD")]
+pub fn head_get(_owner: Owner, _project_name: &str, _project: Project) -> status::Custom<&'static str> {
     status::Custom(Status::Forbidden, NO_DUMB_GIT_MSG)
 }
 
-#[get("/<_owner>/<_project>/objects/info/alternates")]
-pub fn info_alt_get(_owner: Owner, _project: Project) -> status::Custom<&'static str> {
+#[get("/<_owner>/<_project_name>/objects/info/alternates")]
+pub fn info_alt_get(_owner: Owner, _project_name: &str, _project: Project) -> status::Custom<&'static str> {
     status::Custom(Status::Forbidden, NO_DUMB_GIT_MSG)
 }
 
-#[get("/<_owner>/<_project>/objects/info/http-alternates")]
-pub fn info_http_alt_get(_owner: Owner, _project: Project) -> status::Custom<&'static str> {
+#[get("/<_owner>/<_project_name>/objects/info/http-alternates")]
+pub fn info_http_alt_get(_owner: Owner, _project_name: &str, _project: Project) -> status::Custom<&'static str> {
     status::Custom(Status::Forbidden, NO_DUMB_GIT_MSG)
 }
 
-#[get("/<_owner>/<_project>/objects/info/packs")]
-pub fn info_packs_get(_owner: Owner, _project: Project) -> status::Custom<&'static str> {
+#[get("/<_owner>/<_project_name>/objects/info/packs")]
+pub fn info_packs_get(_owner: Owner, _project_name: &str, _project: Project) -> status::Custom<&'static str> {
     status::Custom(Status::Forbidden, NO_DUMB_GIT_MSG)
 }
 
-#[get("/<_owner>/<_project>/objects/info/<_requested>", rank = 20)]
-pub fn info_all_get(_owner: Owner, _project: Project, _requested: String) -> status::Custom<&'static str> {
+#[get("/<_owner>/<_project_name>/objects/info/<_requested>", rank = 20)]
+pub fn info_all_get(_owner: Owner, _project_name: &str, _project: Project, _requested: String) -> status::Custom<&'static str> {
     status::Custom(Status::Forbidden, NO_DUMB_GIT_MSG)
 }
 
-#[get("/<_owner>/<_project>/<_hex_2>/<_hex_38>", rank = 20)]
-pub fn loose_object(_owner: Owner, _project: Project, _hex_2: String, _hex_38: String) -> status::Custom<&'static str> {
+#[get("/<_owner>/<_project_name>/<_hex_2>/<_hex_38>", rank = 20)]
+pub fn loose_object(_owner: Owner, _project_name: &str, _project: Project, _hex_2: String, _hex_38: String) -> status::Custom<&'static str> {
     status::Custom(Status::Forbidden, NO_DUMB_GIT_MSG)
 }
 
-#[get("/<_owner>/<_project>/objects/pack/<_pack_sha>")] // .idx and .pack
-pub fn pack_get(_owner: Owner, _project: Project, _pack_sha: Sha1) -> status::Custom<&'static str> {
+#[get("/<_owner>/<_project_name>/objects/pack/<_pack_sha>")] // .idx and .pack
+pub fn pack_get(_owner: Owner, _project_name: &str, _project: Project, _pack_sha: Sha1) -> status::Custom<&'static str> {
     status::Custom(Status::Forbidden, NO_DUMB_GIT_MSG)
 }
